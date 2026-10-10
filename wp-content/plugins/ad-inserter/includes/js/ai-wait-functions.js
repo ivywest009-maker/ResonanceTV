@@ -5,10 +5,10 @@ function ai_wait_for_functions () {
   return new Promise (wait_for_functions);
 
   function wait_for_functions (resolve, reject) {
-    if (typeof ai_functions !== 'undefined')
-      resolve (ai_functions);
+    if (typeof cs_functions !== 'undefined')
+      resolve (cs_functions);
     else if (timeout && (Date.now () - start) >= timeout)
-      reject (new Error ("AI FUNCTIONS NOT LOADED"));
+      reject (new Error ("AI CS FUNCTIONS NOT LOADED"));
     else
       setTimeout (wait_for_functions.bind (this, resolve, reject), 50);
   }

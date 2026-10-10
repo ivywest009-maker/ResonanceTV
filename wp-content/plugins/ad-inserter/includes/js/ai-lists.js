@@ -81,10 +81,10 @@ function nextAll (element, selector) {
     if ((document.querySelector ('#ai-iab-tcf-bar') != null || document.querySelector ('.ai-list-manual') != null) && typeof __tcfapi == 'function' && typeof ai_load_blocks == 'function' && typeof ai_iab_tcf_callback_installed == 'undefined') {
 
       function ai_iab_tcf_callback (tcData, success) {
-        if (ai_debug) console.log ("AI LISTS ai_iab_tcf_callback", success, tcData);
+        if (ai_debug) console.log ("AI LISTS ai_iab_tcf_callback", success, tcData.eventStatus, tcData.cmpStatus, tcData);
 
         if (success) {
-          if (tcData.eventStatus === 'useractioncomplete') {
+          if (tcData.eventStatus === 'useractioncomplete' || tcData.cmpStatus === 'loaded') {
             ai_tcData = tcData;
 
             if (ai_debug) console.log ("AI LISTS ai_load_blocks ()");
@@ -203,6 +203,13 @@ function nextAll (element, selector) {
         }
 
         __tcfapi ('getTCData', 2, function (tcData, success) {
+
+          // We already have the data
+          if (!success && typeof ai_tcData == 'object') {
+            tcData = ai_tcData;
+            success = true;
+          }
+
           if (success) {
             if (iab_tcf_bar != null) {
               iab_tcf_bar.classList.remove ('status-error');
@@ -258,6 +265,7 @@ function nextAll (element, selector) {
               }
             }
         });
+
       }
     }
 
@@ -701,6 +709,9 @@ function nextAll (element, selector) {
                 var euconsent_v2        = (list_cookie.indexOf ('tcf-v2') == 0 || list_cookie.indexOf ('euconsent-v2') == 0);
                 var euconsent_v2_check  = euconsent_v2 && (structured_data || ai_tcfapi);
 
+
+//            if (ai_debug) console.log ("AI LISTS COOKIE euconsent_v2_check", euconsent_v2, euconsent_v2_check);
+
                 if (list_cookie.indexOf ('=') != - 1) {
                   var list_parameter_data = list_cookie.split ("=");
                   cookie_name  = list_parameter_data [0];
@@ -712,6 +723,17 @@ function nextAll (element, selector) {
                 }
 
                 if (euconsent_v2_check) {
+
+
+//                  setTimeout (function () {
+//                    var iab_tcf_status = document.querySelector ('#ai-iab-tcf-status');
+//                    var iab_tcf_bar = document.querySelector ('#ai-iab-tcf-bar');
+//                    if (iab_tcf_bar != null) {
+//                      iab_tcf_bar.style.display = 'block';
+//                    }
+//                  }, 200);
+
+
                   // IAB Europe Transparency and Consent Framework (TCF v2)
                   if (ai_debug) console.log ("AI LISTS COOKIE tcf-v2");
 
@@ -720,6 +742,9 @@ function nextAll (element, selector) {
                   if (iab_tcf_bar != null) {
                     iab_tcf_bar.style.display = 'block';
                   }
+
+//            if (ai_debug) console.log ("AI LISTS COOKIE iab_tcf_bar", iab_tcf_bar, iab_tcf_status);
+
 
                   if (ai_tcfapi && typeof ai_tcfapi_found == 'boolean') {
                     if (ai_debug) console.log ("");
@@ -800,6 +825,7 @@ function nextAll (element, selector) {
                         }
                       }
                     }
+
                 } else
 
                 if (structured_data) {

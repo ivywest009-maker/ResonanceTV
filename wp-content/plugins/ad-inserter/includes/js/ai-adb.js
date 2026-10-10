@@ -389,7 +389,7 @@ ai_adb_detection_type = function (n) {
         return "14 quantserve.com";
         break;
       case 15:
-        return "15 ezodn.com";         // disabled
+        return "15 ai-functions";
         break;
       case 16:
         return "16 googletagmanager.com";
@@ -870,6 +870,15 @@ window.addEventListener ('load', (event) => {
       }
   }
 
+  var element = document.querySelector (b64d ("I2FpLWFkYi1mdQ=="));
+  if (element != null) {
+    if (!!(element.clientWidth * element.clientHeight)) {
+      ai_adb_undetected (15);
+    } else {
+        if (!ai_adb_active || ai_debugging_active) ai_adb_detected (15);
+      }
+  }
+
   function ai_adb_external_scripts () {
     if (ai_adb_debugging) console.log ("AI AD BLOCKING check external scripts");
 
@@ -906,15 +915,6 @@ window.addEventListener ('load', (event) => {
         ai_adb_undetected (14);
       } else {
           if (!ai_adb_active || ai_debugging_active) ai_adb_detected (14);
-        }
-    }
-
-    var element = document.querySelector (b64d ("I2FpLWFkYi1leg=="));
-    if (element != null) {
-      if (!!(element.clientWidth * element.clientHeight)) {
-        ai_adb_undetected (15);
-      } else {
-          if (!ai_adb_active || ai_debugging_active) ai_adb_detected (15);
         }
     }
 
