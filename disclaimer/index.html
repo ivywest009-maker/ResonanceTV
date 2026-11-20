@@ -2,9 +2,1140 @@
 <html lang="en-US">
 <head><meta charset="UTF-8">
 	
-	<title>Disclaimer – Resonance Visa Sponsorship</title>
-<meta name="robots" content="max-image-preview:large">
+	    <style>
+        .pro-wccp:before {
+            content: "\f160";
+            top: 3px;
+        }
+        .pro-wccp:before{
+            color:#02CA03 !important
+        }
+        .pro-wccp {
+            transform: rotate(45deg);
+        }
+    </style>
+    <script id="wccp_pro_disable_selection">
+
+var image_save_msg = 'You are not allowed to save images!';
+
+var no_menu_msg = 'Context menu disabled!';
+
+var smessage = "Alert: Content selection is disabled!!";
+
+
+"use strict";
+/* This because search property "includes" does not supported by IE*/
+if (!String.prototype.includes) {
+String.prototype.includes = function(search, start) {
+  if (typeof start !== 'number') {
+	start = 0;
+  }
+
+  if (start + search.length > this.length) {
+	return false;
+  } else {
+	return this.indexOf(search, start) !== -1;
+  }
+};
+}
+/*////////////////////////////////////*/
+let canCall = true;
+
+function call_disable_copy_WithDelay(e) {
+  if (canCall) {
+    canCall = false;
+    disable_copy(e);
+    setTimeout(() => {
+      canCall = true;
+    }, 1000);
+  }
+}
+
+function disable_copy(e)
+{
+	window.wccp_pro_iscontenteditable_flag = false;
+	
+	wccp_pro_log_to_console_if_allowed("disable_copy");
+	
+	var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+  	
+	var target = e.target || e.srcElement;
+
+	var elemtype = e.target.nodeName;
+	
+	elemtype = elemtype.toUpperCase();
+	
+	if (apply_class_exclusion(e) == "Yes") return true;
+
+	if(wccp_pro_iscontenteditable(e) == true) {return true;}
+	
+	if(is_content_editable_element(current_clicked_element) == true)
+	{
+		return true;
+	}
+	else
+	{
+		if (smessage !== "" && e.detail == 2)
+			show_wccp_pro_message(smessage);
+		
+		if (isSafari)
+		{
+			return true;
+		}
+		else
+		{
+			//wccp_pro_clear_any_selection();
+			
+			return false;
+		}
+	}
+	
+	/*disable context menu when shift + right click is pressed*/
+	var shiftPressed = 0;
+	
+	var evt = e?e:window.event;
+	
+	if (parseInt(navigator.appVersion)>3) {
+		
+		if (document.layers && navigator.appName=="Netscape")
+			
+			shiftPressed = (e.modifiers-0>3);
+			
+		else
+			
+			shiftPressed = e.shiftKey;
+			
+		if (shiftPressed) {
+			
+			if (smessage !== "") show_wccp_pro_message(smessage);
+			
+			var isFirefox = typeof InstallTrigger !== 'undefined';   /* Firefox 1.0+ */
+			
+			if (isFirefox) {
+			evt.cancelBubble = true;
+			if (evt.stopPropagation) evt.stopPropagation();
+			if (evt.preventDefault()) evt.preventDefault();
+			show_wccp_pro_message (smessage);
+			wccp_pro_clear_any_selection();
+			return false;
+			}
+			
+			wccp_pro_clear_any_selection();
+			return false;
+		}
+	}
+	
+	if(e.which === 2 ){
+	var clickedTag_a = (e==null) ? event.srcElement.tagName : e.target.tagName;
+	   show_wccp_pro_message(smessage);
+       wccp_pro_clear_any_selection(); return false;
+    }
+	var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+	var checker_IMG = 'checked';
+	if (elemtype == "IMG" && checker_IMG == 'checked' && e.detail == 2) {show_wccp_pro_message(alertMsg_IMG);wccp_pro_clear_any_selection();return false;}
+
+    //elemtype must be merged by elemtype checker on function disable_copy & disable_hot_keys
+	if (is_content_editable_element(elemtype) == false)
+	{
+		if (smessage !== "" && e.detail == 2)
+			show_wccp_pro_message(smessage);
+		
+		if (isSafari)
+		{
+			return true;
+		}
+		else
+		{
+			wccp_pro_clear_any_selection(); return false;
+		}
+	}
+	else
+	{
+		return true;
+	}
+}
+////////////////////////////
+function disable_copy_ie()
+{
+	wccp_pro_log_to_console_if_allowed("disable_copy_ie_function_started");
+	
+	var e = e || window.event;
+	/*also there is no e.target property in IE.*/
+	/*instead IE uses window.event.srcElement*/
+  	var target = e.target || e.srcElement;
+	
+	var elemtype = window.event.srcElement.nodeName;
+	
+	elemtype = elemtype.toUpperCase();
+
+	if(wccp_pro_iscontenteditable(e) == true) return true;
+	
+	if (apply_class_exclusion(e) == "Yes") return true;
+	
+	if (elemtype == "IMG") {show_wccp_pro_message(alertMsg_IMG);return false;}
+	
+	//elemtype must be merged by elemtype checker on function disable_copy & disable_hot_keys
+	if (is_content_editable_element(elemtype) == false)
+	{
+		return false;
+	}
+}
+function disable_drag_text(e)
+{
+	wccp_pro_log_to_console_if_allowed("disable_drag_text");
+	
+	/*var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);*/
+	/*if (isSafari) {show_wccp_pro_message(alertMsg_IMG);return false;}*/
+	
+	var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement*/
+  	
+	var target = e.target || e.srcElement;
+	
+	/*For contenteditable tags*/
+	
+	if (apply_class_exclusion(e) == "Yes") return true;
+
+	var elemtype = e.target.nodeName;
+	
+	elemtype = elemtype.toUpperCase();
+	
+	var disable_drag_text_drop = 'checked';
+	
+	if (disable_drag_text_drop != "checked")  return true;
+	
+	if (window.location.href.indexOf("/user/") > -1) {
+      return true; /*To allow users to drag & drop images when editing thier profiles*/
+    }
+	
+	return false;
+}
+
+/*/////////////////special for safari Start////////////////*/
+var onlongtouch;
+
+var timer;
+
+var touchduration = 1000; /*length of time we want the user to touch before we do something*/
+
+var elemtype = "";
+
+function touchstart(e)
+{
+	wccp_pro_log_to_console_if_allowed("touchstart");
+	
+	e = e || window.event;// also there is no e.target property in IE. instead IE uses window.event.srcElement
+	
+	var target = e.target || e.srcElement;
+
+	var elemtype = e.target.nodeName;
+	
+	elemtype = elemtype.toUpperCase();
+	
+	//if (elemtype == "A") return;
+
+	if (apply_class_exclusion(elemtype) == 'Yes') return;
+	/*also there is no e.target property in IE.*/
+	/*instead IE uses window.event.srcElement*/
+	
+	if(!wccp_pro_is_passive()) e.preventDefault();
+	if (!timer) {
+		timer = setTimeout(onlongtouch, touchduration);
+	}
+}
+
+function touchend()
+{
+	wccp_pro_log_to_console_if_allowed("touchend");
+	
+    /*stops short touches from firing the event*/
+    if (timer) {
+        clearTimeout(timer);
+        timer = null;
+    }
+	onlongtouch();
+}
+
+onlongtouch = function(e)/*this will clear the current selection if any_not_editable_thing selected*/
+{
+	wccp_pro_log_to_console_if_allowed("onlongtouch");
+	
+	if (is_content_editable_element(elemtype) == false)
+	{
+		if (window.getSelection) {
+			if (window.getSelection().empty) { /*Chrome*/
+			window.getSelection().empty();
+			} else if (window.getSelection().removeAllRanges) {  /*Firefox*/
+			window.getSelection().removeAllRanges();
+			}
+		} else if (document.selection) {  /*IE?*/
+			var textRange = document.body.createTextRange();
+			textRange.moveToElementText(element);
+			textRange.select();
+
+			document.selection.empty();
+		}
+		return false;
+	}
+};
+
+document.addEventListener("DOMContentLoaded", function(event)
+	{ 
+		window.addEventListener("touchstart", touchstart, false);
+		window.addEventListener("touchend", touchend, false);
+	});
+
+
+function wccp_pro_is_passive()
+{
+	wccp_pro_log_to_console_if_allowed("wccp_pro_is_passive");
+	
+	var cold = false,
+	hike = function() {};
+
+	try {
+	var aid = Object.defineProperty({}, 'passive', {
+	get() {cold = true}
+	});
+	window.addEventListener('test', hike, aid);
+	window.removeEventListener('test', hike, aid);
+	} catch (e) {}
+
+	return cold;
+}
+/*/////////////////////////////////////////////////////////////////*/
+function reEnable()
+{
+	return true;
+}
+
+if(navigator.userAgent.indexOf('MSIE')==-1) //If not IE
+{
+	document.ondragstart = disable_drag_text;
+	document.onselectstart = call_disable_copy_WithDelay;
+	document.onselectionchange = call_disable_copy_WithDelay;
+	//document.onmousedown = disable_copy;
+	//document.addEventListener('click', disable_copy, false);
+	//document.addEventListener('click', set_current_clicked_element, false);
+	document.addEventListener('mousedown', set_current_clicked_element, false);
+	//document.onclick = reEnable;
+}else
+{
+	document.onselectstart = disable_copy_ie;
+}
+
+var current_clicked_element = "";
+
+var current_clicked_object = null;
+
+function set_current_clicked_element(e)
+{
+	var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+  	
+	var target = e.target || e.srcElement;
+
+	var elemtype = e.target.nodeName;
+	
+	elemtype = elemtype.toUpperCase();
+	
+	current_clicked_element = elemtype;
+	
+	wccp_pro_log_to_console_if_allowed("current_clicked_element = " + current_clicked_element, arguments.callee.name);
+}
+</script>
+	<script id="wccp_pro_css_disable_selection">
+	function wccp_pro_msieversion() 
+		{
+			var ua = window.navigator.userAgent;
+			var msie = ua.indexOf("MSIE");
+			var msie2 = ua.indexOf("Edge");
+			var msie3 = ua.indexOf("Trident");
+
+		if (msie > -1 || msie2 > -1 || msie3 > -1) // If Internet Explorer, return version number
+		{
+			return "IE";
+		}
+		else  // If another browser, return 0
+		{
+			return "otherbrowser";
+		}
+	}
+    
+	var e = document.getElementsByTagName('H1')[0];
+	if(e && wccp_pro_msieversion() == "IE")
+	{
+		e.setAttribute('unselectable',"on");
+	}
+	</script>
+<script id="wccp_pro_disable_hot_keys">
+/*****************For contenteditable tags***************/
+var wccp_pro_iscontenteditable_flag = false;
+
+function wccp_pro_iscontenteditable(e)
+{
+	var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+  	
+	var target = e.target || e.srcElement;
+	
+	var iscontenteditable = "false";
+		
+	if(typeof target.getAttribute!="undefined" )
+	{
+		iscontenteditable = target.getAttribute("contenteditable"); // Return true or false as string
+		
+		if(typeof target.hasAttribute!="undefined")
+		{
+			if(target.hasAttribute("contenteditable"))
+				iscontenteditable = true;
+		}
+	}
+	
+	wccp_pro_log_to_console_if_allowed("iscontenteditable:" + iscontenteditable);
+	
+	var iscontenteditable2 = false;
+	
+	if(typeof target.isContentEditable!="undefined" ) iscontenteditable2 = target.isContentEditable; // Return true or false as boolean
+
+	if(target.parentElement !=null) iscontenteditable2 = target.parentElement.isContentEditable;
+	
+	if (iscontenteditable == "true" || iscontenteditable == true || iscontenteditable2 == true)
+	{
+		if(typeof target.style!="undefined" ) target.style.cursor = "text";
+		
+		wccp_pro_iscontenteditable_flag = true;
+		
+		wccp_pro_log_to_console_if_allowed("wccp_pro_iscontenteditable: true");
+		
+		return true;
+	}
+	wccp_pro_log_to_console_if_allowed("wccp_pro_iscontenteditable: false");
+}
+/******************************************************/
+function wccp_pro_clear_any_selection()
+{
+	if(window.wccp_pro_iscontenteditable_flag == true) return;
+	
+	wccp_pro_log_to_console_if_allowed("wccp_pro_clear_any_selection");
+	
+	var myName = wccp_pro_clear_any_selection.caller.toString();
+	
+	myName = myName.substr('function '.length);
+	
+	myName = myName.substr(0, myName.indexOf('('));
+
+	wccp_pro_log_to_console_if_allowed("called_by: " + myName);
+	
+	if (window.getSelection)
+	{
+		if (window.getSelection().empty)
+		{  // Chrome
+			window.getSelection().empty();
+		} else if (window.getSelection().removeAllRanges) 
+		{  // Firefox
+			window.getSelection().removeAllRanges();
+		}
+	} else if (document.selection)
+	{  // IE?
+		document.selection.empty();
+	}
+	
+	//show_wccp_pro_message("You are not allowed to make this operation");
+}
+
+
+/*Is content_editable element*/
+function is_content_editable_element(element_name = "")
+{
+	if (element_name == "TEXT" || element_name == "#TEXT" || element_name == "TEXTAREA" || element_name == "INPUT" || element_name == "PASSWORD" || element_name == "SELECT" || element_name == "OPTION" || element_name == "EMBED" || element_name == "CODE" || element_name == "CODEBLOCK_WCCP")
+	{
+		wccp_pro_log_to_console_if_allowed("is_content_editable_element: true >>" + element_name);
+		
+		return true;
+	}
+	wccp_pro_log_to_console_if_allowed("is_content_editable_element: false >>" + element_name);
+	
+	return false;
+}
+/*Is selection enabled element*/
+/*
+function is_selection_enabled_element(element_name = "")
+{
+	if (is_content_editable_element == true)
+	{
+		wccp_pro_log_to_console_if_allowed("is_selection_enabled_element: true >>" + element_name);
+		
+		return true;
+	}
+	wccp_pro_log_to_console_if_allowed("is_selection_enabled_element: false >>" + element_name);
+	
+	return false;
+}
+*/
+/*Hot keys function  */
+function disable_hot_keys(e)
+{
+	wccp_pro_log_to_console_if_allowed("disable_hot_keys");
+	
+	e = e || window.event;
+	
+	//console.log(e);
+	
+	if (!e) return;
+	
+	var key;
+
+		if(window.event)
+			  key = window.event.keyCode;     /*IE*/
+		else if (e.hasOwnProperty("which")) key = e.which;     /*firefox (97)*/
+
+	wccp_pro_log_to_console_if_allowed("Data:", key);
+	
+			
+		if (key == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) )//F12 chrome developer key disable
+		{
+			show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+			
+			return false;
+		}
+		
+	var elemtype = e.target.tagName;
+	
+	elemtype = elemtype.toUpperCase();
+	
+	var sel = getSelectionTextAndContainerElement();
+	
+	if(elemtype == "BODY" && sel.text != "") elemtype = sel.containerElement.tagName; /* no need for it when tag name is BODY, so we get the selected text tag name */
+
+	/*elemtype must be merged by elemtype checker on function disable_copy & disable_copy_ie*/
+	if (is_content_editable_element(elemtype) == true)
+	{
+		elemtype = 'TEXT';
+	}
+	
+	if(wccp_pro_iscontenteditable(e) == true) elemtype = 'TEXT';
+	
+		if (key == 44)/*For any emement type, text elemtype is not excluded here, (prntscr (44)*/
+		{
+			copyTextToClipboard("");
+			show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+			return false;
+		}	
+	if (e.ctrlKey || e.metaKey)
+	{
+		if (elemtype!= 'TEXT' && (key == 97 || key == 99 || key == 120 || key == 26 || key == 43))
+		{
+			 show_wccp_pro_message('Alert: You are not allowed to copy content or view source');
+			 return false;
+		}
+		if (elemtype!= 'TEXT')
+		{
+						
+			if (key == 65)
+			{
+				show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+				return false;
+			}			
+						
+			if (key == 67)
+			{
+				show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+				return false;
+			}			
+						
+			if (key == 88)
+			{
+				show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+				return false;
+			}			
+						
+			if (key == 86)
+			{
+				show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+				return false;
+			}		}
+				
+		if (key == 85)
+		{
+			show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+			return false;
+		}		
+				if (key == 80)
+		{
+			show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+			return false;
+		}		
+				if (key == 44)
+		{
+			copyTextToClipboard("no");
+			show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+			return false;
+		}		
+		
+					if (key == 73)//F12 chrome developer key disable
+			{
+				show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+				return false;
+			}
+				
+				
+		if (key == 83)
+		{
+			show_wccp_pro_message('You are not allowed to do this action on the current page!!');
+			return false;
+		}    }
+return true;
+}
+
+
+window.addEventListener('load', function (){
+	if(window.Zepto || !window.jQuery) jQuery =  $;
+	jQuery(document).ready(function() {
+	  jQuery(document).bind("keyup keydown", disable_hot_keys);
+	});
+});
+
+</script>
+	<script id="wccp_pro_disable_Right_Click">
+
+	function wccp_pro_nocontext(e)
+	{
+		wccp_pro_log_to_console_if_allowed("wccp_pro_nocontext function");
+		
+		const caller = wccp_pro_nocontext.caller;
+		
+		if (caller) wccp_pro_log_to_console_if_allowed("Caller function is: " + caller.name);
+		
+		e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+		
+		if (apply_class_exclusion(e) == 'Yes') return true;
+		
+		var exception_tags = 'NOTAG,';
+		
+		var clickedTag = (e==null) ? event.srcElement.tagName : e.target.tagName;
+		
+		wccp_pro_log_to_console_if_allowed("clickedTag: " + clickedTag);
+		
+		var target = e.target || e.srcElement;
+		
+		var parent_tag = ""; var parent_of_parent_tag = "";
+		
+		if(target.parentElement != null)
+		{
+			parent_tag = target.parentElement.tagName;
+			
+			if(target.parentElement.parentElement != null) parent_of_parent_tag = target.parentElement.parentElement.tagName;
+		}
+		
+		var checker = 'checked';
+		if ((clickedTag == "IMG" || clickedTag == "FIGURE" || clickedTag == "SVG" || clickedTag == "PROTECTEDIMGDIV") && checker == 'checked') {
+			if (alertMsg_IMG != "")show_wccp_pro_message(alertMsg_IMG);
+			return false;
+		}else {exception_tags = exception_tags + 'IMG,';}
+		
+		checker = '';
+		if ((clickedTag == "VIDEO" || clickedTag == "PROTECTEDWCCPVIDEO" || clickedTag == "EMBED") && checker == 'checked') {
+			if (alertMsg_VIDEO != "")show_wccp_pro_message(alertMsg_VIDEO);
+			return false;
+		}else {exception_tags = exception_tags + 'VIDEO,PROTECTEDWCCPVIDEO,EMBED,';}
+		
+		checker = '';
+		if ((clickedTag == "A" || clickedTag == "TIME" || parent_tag == "A" || parent_of_parent_tag == "A") && checker == 'checked') {
+			if (alertMsg_A != "")show_wccp_pro_message(alertMsg_A);
+			return false;
+		}else {exception_tags = exception_tags + 'A,';if(parent_tag == "A" || parent_of_parent_tag == "A") clickedTag = "A";}
+
+		checker = 'checked';
+		if ((clickedTag == "P" || clickedTag == "B" || clickedTag == "FONT" ||  clickedTag == "LI" || clickedTag == "UL" || clickedTag == "STRONG" || clickedTag == "OL" || clickedTag == "BLOCKQUOTE" || clickedTag == "TH" || clickedTag == "TR" || clickedTag == "TD" || clickedTag == "SPAN" || clickedTag == "EM" || clickedTag == "SMALL" || clickedTag == "I" || clickedTag == "BUTTON") && checker == 'checked') {
+			if (alertMsg_PB != "")show_wccp_pro_message(alertMsg_PB);
+			return false;
+		}else {exception_tags = exception_tags + 'P,B,FONT,LI,UL,STRONG,OL,BLOCKQUOTE,TD,SPAN,EM,SMALL,I,BUTTON,';}
+		
+		checker = 'checked';
+		if ((clickedTag == "INPUT" || clickedTag == "PASSWORD") && checker == 'checked') {
+			if (alertMsg_INPUT != "")show_wccp_pro_message(alertMsg_INPUT);
+			return false;
+		}else {exception_tags = exception_tags + 'INPUT,PASSWORD,';}
+		
+		checker = 'checked';
+		if ((clickedTag == "H1" || clickedTag == "H2" || clickedTag == "H3" || clickedTag == "H4" || clickedTag == "H5" || clickedTag == "H6" || clickedTag == "ASIDE" || clickedTag == "NAV") && checker == 'checked') {
+			if (alertMsg_H != "")show_wccp_pro_message(alertMsg_H);
+			return false;
+		}else {exception_tags = exception_tags + 'H1,H2,H3,H4,H5,H6,';}
+		
+		checker = 'checked';
+		if (clickedTag == "TEXTAREA" && checker == 'checked') {
+			if (alertMsg_TEXTAREA != "")show_wccp_pro_message(alertMsg_TEXTAREA);
+			return false;
+		}else {exception_tags = exception_tags + 'TEXTAREA,';}
+		
+		checker = 'checked';
+		if ((clickedTag == "DIV" || clickedTag == "BODY" || clickedTag == "HTML" || clickedTag == "ARTICLE" || clickedTag == "SECTION" || clickedTag == "NAV" || clickedTag == "HEADER" || clickedTag == "FOOTER") && checker == 'checked') {
+			if (alertMsg_EmptySpaces != "")show_wccp_pro_message(alertMsg_EmptySpaces);
+			return false;
+		}
+		else
+		{
+			if (exception_tags.indexOf(clickedTag)!=-1)
+			{
+				return true;
+			}
+			else
+			return false;
+		}
+	}
+	
+	function disable_drag_images(e)
+	{return;
+		wccp_pro_log_to_console_if_allowed("disable_drag_images");
+		
+		var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+		
+		var target = e.target || e.srcElement;
+		
+		//For contenteditable tags
+		if (apply_class_exclusion(e) == "Yes") return true;
+
+		var elemtype = e.target.nodeName;
+		
+		if (elemtype != "IMG") {return;}
+		
+		elemtype = elemtype.toUpperCase();
+		
+		var disable_drag_drop_images = 'checked';
+		
+		if (disable_drag_drop_images != "checked")  return true;
+		
+		if (window.location.href.indexOf("/user/") > -1) {
+		  return true; //To allow users to drag & drop images when editing thier profiles
+		}
+		
+		show_wccp_pro_message(alertMsg_IMG);
+		
+		return false;
+	}
+	
+	var alertMsg_IMG = "Alert: Protected image";
+	var alertMsg_A = "Alert: This link is protected";
+	var alertMsg_PB = "Alert: Right click on text is disabled";
+	var alertMsg_INPUT = "Alert: Right click is disabled";
+	var alertMsg_H = "Alert: Right click on headlines is disabled";
+	var alertMsg_TEXTAREA = "Alert: Right click is disabled";
+	var alertMsg_EmptySpaces = "Alert: Right click on empty spaces is disabled";
+	var alertMsg_VIDEO = "Alert: Right click on videos is disabled";
+	//document.oncontextmenu=null;
+	window.addEventListener('load', function (){
+	if(window.Zepto || !window.jQuery) jQuery =  $;
+	jQuery(document).ready(function(){
+		jQuery(document).on('contextmenu', wccp_pro_nocontext);
+	});
+	});
+	window.addEventListener('load', function (){
+	if (typeof jQuery === 'undefined')
+	{
+		alert("no jquery");
+		document.oncontextmenu = wccp_pro_nocontext;
+		document.addEventListener("contextmenu",wccp_pro_nocontext);
+		window.addEventListener("contextmenu",wccp_pro_nocontext);
+	}
+	});
+</script>
+	
+	<script id="wccp_pro_disable_drag_images">
+	document.ondragstart = disable_drag_images;
+		window.addEventListener('load', function (){
+			if(window.Zepto || !window.jQuery) jQuery =  $;
+			jQuery(document).ready(function(){
+				jQuery('img').each(function() {
+					jQuery(this).attr('draggable', false);
+				});
+			});
+		});
+	</script>
+	<style id="wccp_pro_style1">
+		img{
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			-khtml-user-select: none;
+			user-select: none;
+			-webkit-user-drag: none;
+		}
+	</style>
+<script id="wccp_pro_class_exclusion">
+function copyToClipboard(elem) {
+	  // create hidden text element, if it doesn't already exist
+    var targetId = "_wccp_pro_hiddenCopyText_";
+    {
+        // must use a temporary form element for the selection and copy
+        target = document.getElementById(targetId);
+        if (!target) {
+            var target = document.createElement("textarea");
+            target.style.position = "absolute";
+            target.style.left = "-9999px";
+            target.style.top = "0";
+            target.id = targetId;
+            document.body.appendChild(target);
+        }
+        target.textContent = elem.textContent;
+    }
+    // select the content
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+    
+    // copy the selection
+    var succeed;
+    try {
+    	  succeed = document.execCommand("copy");
+    } catch(e) {
+        succeed = false;
+    }
+
+    // restore original focus
+    if (currentFocus && typeof currentFocus.focus === "function") {
+        currentFocus.focus();
+    }
+    
+    
+	// clear temporary content
+	target.textContent = "";
+	document.getElementsByTagName('span')[0].innerHTML = " ";
+    return succeed;
+}
+/**************************************************/
+function wccp_pro_log_to_console_if_allowed(data = "")
+{//return;
+	var myName = "";
+	
+	if(wccp_pro_log_to_console_if_allowed.caller != null) myName = wccp_pro_log_to_console_if_allowed.caller.toString();
+	
+	myName = myName.substr('function '.length);
+	
+	myName = myName.substr(0, myName.indexOf('('));
+	
+	}
+/**************************************************/
+function fallbackCopyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand("copy");
+    var msg = successful ? "successful" : "unsuccessful";
+    wccp_pro_log_to_console_if_allowed("Fallback: Copying text command was " + msg);
+  } catch (err) {
+    console.error("Fallback: Oops, unable to copy", err);
+  }
+
+  document.body.removeChild(textArea);
+}
+/*****************************************/
+function copyTextToClipboard(text) {
+  if (!navigator.clipboard) {
+    fallbackCopyTextToClipboard(text);
+    return;
+  }
+  navigator.clipboard.writeText(text).then(
+    function() {
+      console.log("Async: Copying to clipboard was successful!");
+    },
+    function(err) {
+      console.error("Async: Could not copy text: ", err);
+    }
+  );
+}
+/*****************************************/
+/*getSelectionTextAndContainerElement*/
+function getSelectionTextAndContainerElement()
+{
+    var text = "", containerElement = null;
+    if (typeof window.getSelection != "undefined") {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var node = sel.getRangeAt(0).commonAncestorContainer;
+            containerElement = node.nodeType == 1 ? node : node.parentNode;
+			if (typeof(containerElement.parentElement) != 'undefined') current_clicked_object = containerElement.parentElement;
+            text = sel.toString();
+        }
+    } else if (typeof document.selection != "undefined" && document.selection.type != "Control")
+	{
+        var textRange = document.selection.createRange();
+        containerElement = textRange.parentElement();
+        text = textRange.text;
+    }
+    
+	return {
+        text: text,
+        containerElement: containerElement
+    };
+}
+
+function getSelectionParentElement() {
+    var parentEl = null, sel;
+	
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.rangeCount) {
+            parentEl = sel.getRangeAt(0).commonAncestorContainer;
+			//sel.getRangeAt(0).startContainer.parentNode;
+            if (parentEl.nodeType != 1) {
+                parentEl = parentEl.parentNode;
+            }
+        }
+    } else if ( (sel = document.selection) && sel.type != "Control") {
+        parentEl = sel.createRange().parentElement();
+    }
+	
+	let arr = new Array();
+	
+	arr["nodeName"] = "cant_find_parent_element";
+	
+	if(parentEl != null)
+		return parentEl;
+	else
+		return arr;
+}
+/*****************************************/
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+/*****************************************/
+</script>
+
+<script id="apply_class_exclusion">
+function apply_class_exclusion(e)
+{
+	wccp_pro_log_to_console_if_allowed(e);
+	
+	var my_return = 'No';
+	
+	var e = e || window.event; // also there is no e.target property in IE. instead IE uses window.event.srcElement
+  	
+	var target = e.target || e.srcElement || e || 'nothing';
+	
+	var excluded_classes = '' + '';
+	
+	var class_to_exclude = "";
+	
+	if(target.parentElement != null)
+	{
+		class_to_exclude = target.className + ' ' + target.parentElement.className || '';
+	}else{
+		class_to_exclude = target.className;
+	}
+	
+	var class_to_exclude_array = Array();
+	
+	//console.log(class_to_exclude);
+	
+	if (typeof(class_to_exclude) != 'undefined') class_to_exclude_array = class_to_exclude.split(" ");
+	
+	//console.log (class_to_exclude_array);
+	
+	class_to_exclude_array.forEach(function(item)
+	{
+		if(item != '' && excluded_classes.indexOf(item)>=0)
+		{
+			//target.style.cursor = "text";
+			
+			//console.log ('Yes');
+			
+			my_return = 'Yes';
+		}
+	});
+
+	try {
+		class_to_exclude = target.parentElement.getAttribute('class') || target.parentElement.className || '';
+		}
+	catch(err) 
+		{
+		class_to_exclude = '';
+		}
+	
+	if(class_to_exclude != '' && excluded_classes.indexOf(class_to_exclude)>=0)
+	{
+		//target.style.cursor = "text";
+		my_return = 'Yes';
+	}
+
+	return my_return;
+}
+</script>
+<style id="wccp_pro_style2" data-asas-style="">
+
+	
+	*[contenteditable] , [contenteditable] *,*[contenteditable="true"] , [contenteditable="true"] * { /* for contenteditable tags*/ , /* for tags inside contenteditable tags*/
+	  -webkit-user-select: auto !important;
+	  cursor: text !important;
+	  user-select: text !important;
+	  pointer-events: auto !important;
+	}
+	
+	/*
+	*[contenteditable]::selection, [contenteditable] *::selection, [contenteditable="true"]::selection, [contenteditable="true"] *::selection { background: Highlight !important; color: HighlightText !important;}
+	*[contenteditable]::-moz-selection, [contenteditable="true"] *::-moz-selection { background: Highlight !important; color: HighlightText !important;}
+	input::selection,textarea::selection, code::selection, code > *::selection { background: Highlight !important; color: HighlightText !important;}
+	input::-moz-selection,textarea::-moz-selection, code::-moz-selection, code > *::-moz-selection { background: Highlight !important; color: HighlightText !important;}
+	*/
+	a{ cursor: pointer ; pointer-events: auto !important;}
+
+	</style><style>TEXT,TEXTAREA,input[type="text"] {cursor: text !important; user-select: text !important;}</style>	<script id="wccp_pro_alert_message">
+	window.addEventListener('DOMContentLoaded', function() {}); //This line to stop JS deffer function in wp-rockt pluign
+	
+	window.addEventListener('load', function (){
+		// Create the first div element with the "oncontextmenu" attribute
+		const wccp_pro_mask = document.createElement('div');
+		wccp_pro_mask.setAttribute('oncontextmenu', 'return false;');
+		wccp_pro_mask.setAttribute('id', 'wccp_pro_mask');
+
+		// Create the second div element with the "msgmsg-box-wpcp hideme" classes
+		const wpcp_error_message = document.createElement('div');
+		wpcp_error_message.setAttribute('id', 'wpcp-error-message');
+		wpcp_error_message.setAttribute('class', 'msgmsg-box-wpcp hideme');
+
+		// Add a span element with the "error: " text inside the second div
+		const error_span = document.createElement('span');
+		error_span.innerText = 'error: ';
+		wpcp_error_message.appendChild(error_span);
+
+		// Add the error message text inside the second div
+		const error_text = document.createTextNode('Alert: Content selection is disabled!!');
+		wpcp_error_message.appendChild(error_text);
+
+		// Add the div elements to the document body
+		document.body.appendChild(wccp_pro_mask);
+		document.body.appendChild(wpcp_error_message);
+	});
+
+	var timeout_result;
+	function show_wccp_pro_message(smessage="", style="")
+	{
+		wccp_pro_log_to_console_if_allowed(smessage);
+				
+		timeout = 3000;
+		
+		if(style == "") style = "warning-wpcp";
+		
+		if (smessage !== "" && timeout!=0)
+		{
+			var smessage_text = smessage;
+			jquery_fadeTo();
+			document.getElementById("wpcp-error-message").innerHTML = smessage_text;
+			document.getElementById("wpcp-error-message").className = "msgmsg-box-wpcp showme " + style;
+			clearTimeout(timeout_result);
+			timeout_result = setTimeout(hide_message, timeout);
+		}
+		else
+		{
+			clearTimeout(timeout_result);
+			timeout_result = setTimeout(hide_message, timeout);
+		}
+	}
+	function hide_message()
+	{
+		jquery_fadeOut();
+		document.getElementById("wpcp-error-message").className = "msgmsg-box-wpcp warning-wpcp hideme";
+	}
+	function jquery_fadeTo()
+	{
+		try {
+			jQuery("#wccp_pro_mask").fadeTo("slow", 0.3);
+		}
+		catch(err) {
+			//alert(err.message);
+			}
+	}
+	function jquery_fadeOut()
+	{
+		try {
+			jQuery("#wccp_pro_mask").fadeOut( "slow" );
+		}
+		catch(err) {}
+	}
+	</script>
+	<style>
+	#wccp_pro_mask
+	{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		position: fixed;
+		right: 0;
+		top: 0;
+		background-color: #000;
+		pointer-events: none;
+		display: none;
+		z-index: 10000;
+		animation: 0.5s ease 0s normal none 1 running ngdialog-fadein;
+		background: rgba(0, 0, 0, 0.4) none repeat scroll 0 0;
+	}
+	#wpcp-error-message {
+    direction: ltr;
+    text-align: center;
+    pointer-events: none;
+    z-index: 99999999;
+	}
+	.hideme {
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 900ms ease-out, visibility 0s linear 900ms;
+	}
+	.showme {
+		opacity: 1;
+		visibility: visible;
+		transition: none; /* instant when showing */
+	}
+	.msgmsg-box-wpcp {
+		border-radius: 10px;
+		color: #555555;
+		font-family: Tahoma;
+		font-size: 12px;
+		margin: 10px !important;
+		padding: 10px 36px !important;
+		position: fixed;
+		width: 255px;
+		top: 50%;
+		left: 50%;
+		margin-top: -10px !important;
+		margin-left: -130px !important;
+	}
+	.msgmsg-box-wpcp b {
+		font-weight:bold;
+	}
+		.warning-wpcp {
+		background:#ffecec url('https://resonancetv.com/wp-content/plugins/wccp-pro/images/warning.png') no-repeat 10px 50%;
+		border:1px solid #f2bfbf;
+		-webkit-box-shadow: 0px 0px 34px 2px #f2bfbf;
+		-moz-box-shadow: 0px 0px 34px 2px #f2bfbf;
+		box-shadow: 0px 0px 34px 2px #f2bfbf;
+	}
+	.success-wpcp {
+		background: #fafafa url('https://resonancetv.com/wp-content/plugins/wccp-pro/images/success.png') no-repeat 10px 50%;
+		border: 1px solid #00b38f;
+		box-shadow: 0px 0px 34px 2px #adc;
+	}
+    </style>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- This site is optimized with the Yoast SEO plugin v28.9 - https://yoast.com/product/yoast-seo-wordpress/ -->
+	<title>Disclaimer - SOCCERSPEN</title>
+	<meta name="description" content="The information provided on Soccerspen, accessible through soccerspen.com, is published for general informational and educational purposes only.">
+	<link rel="canonical" href="https://resonancetv.com/disclaimer/">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="Disclaimer - SOCCERSPEN">
+	<meta property="og:description" content="The information provided on Soccerspen, accessible through soccerspen.com, is published for general informational and educational purposes only.">
+	<meta property="og:url" content="https://resonancetv.com/disclaimer/">
+	<meta property="og:site_name" content="SOCCERSPEN">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:label1" content="Est. reading time">
+	<meta name="twitter:data1" content="11 minutes">
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebPage","@id":"https:\/\/resonancetv.com\/disclaimer\/","url":"https:\/\/resonancetv.com\/disclaimer\/","name":"Disclaimer - SOCCERSPEN","isPartOf":{"@id":"https:\/\/resonancetv.com\/#website"},"datePublished":"2026-11-20T09:52:27+00:00","description":"The information provided on Soccerspen, accessible through soccerspen.com, is published for general informational and educational purposes only.","breadcrumb":{"@id":"https:\/\/resonancetv.com\/disclaimer\/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https:\/\/resonancetv.com\/disclaimer\/"]}]},{"@type":"BreadcrumbList","@id":"https:\/\/resonancetv.com\/disclaimer\/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/resonancetv.com\/"},{"@type":"ListItem","position":2,"name":"Disclaimer"}]},{"@type":"WebSite","@id":"https:\/\/resonancetv.com\/#website","url":"https:\/\/resonancetv.com\/","name":"SOCCERSPEN","description":"How to Apply for Fully Funded Football Academy Scholarships, International Soccer Trials, Sports Scholarships and Student Visa Sponsorship Opportunities in Europe, USA, Canada and Australia","publisher":{"@id":"https:\/\/resonancetv.com\/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https:\/\/resonancetv.com\/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Organization","@id":"https:\/\/resonancetv.com\/#organization","name":"SOCCERSPEN","url":"https:\/\/resonancetv.com\/","logo":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/resonancetv.com\/#\/schema\/logo\/image\/","url":"https:\/\/resonancetv.com\/wp-content\/uploads\/2026\/09\/cropped-SOCCERSPEN.png","contentUrl":"https:\/\/resonancetv.com\/wp-content\/uploads\/2026\/09\/cropped-SOCCERSPEN.png","width":1254,"height":514,"caption":"SOCCERSPEN"},"image":{"@id":"https:\/\/resonancetv.com\/#\/schema\/logo\/image\/"}}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
 
 
 
@@ -35,6 +1166,10 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 <style id="wp-block-heading-inline-css">
 h1:where(.wp-block-heading).has-background,h2:where(.wp-block-heading).has-background,h3:where(.wp-block-heading).has-background,h4:where(.wp-block-heading).has-background,h5:where(.wp-block-heading).has-background,h6:where(.wp-block-heading).has-background{padding:1.25em 2.375em}h1.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h1.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h2.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h2.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h3.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h3.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h4.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h4.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h5.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h5.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]),h6.has-text-align-left[style*=writing-mode]:where([style*=vertical-lr]),h6.has-text-align-right[style*=writing-mode]:where([style*=vertical-rl]){rotate:180deg}
 /*# sourceURL=https://resonancetv.com/wp-includes/blocks/heading/style.min.css */
+</style>
+<style id="wp-block-latest-comments-inline-css">
+:where(.wp-block-latest-comments){padding-left:0}ol.wp-block-latest-comments{box-sizing:border-box;margin-left:0}:where(.wp-block-latest-comments:not([style*=line-height] .wp-block-latest-comments__comment)){line-height:1.1}:where(.wp-block-latest-comments:not([style*=line-height] .wp-block-latest-comments__comment-excerpt p)){line-height:1.8}.has-dates :where(.wp-block-latest-comments:not([style*=line-height])),.has-excerpts :where(.wp-block-latest-comments:not([style*=line-height])){line-height:1.5}.wp-block-latest-comments__comment{list-style:none;margin-bottom:1em}.has-avatars .wp-block-latest-comments__comment{list-style:none;min-height:2.25em}.has-avatars .wp-block-latest-comments__comment .wp-block-latest-comments__comment-excerpt,.has-avatars .wp-block-latest-comments__comment .wp-block-latest-comments__comment-meta{margin-left:3.25em}.wp-block-latest-comments__comment-excerpt p{font-size:.875em;margin:.36em 0 1.4em}.wp-block-latest-comments__comment-date{display:block;font-size:.75em}.wp-block-latest-comments .avatar,.wp-block-latest-comments__comment-avatar{border-radius:1.5em;display:block;float:left;height:2.5em;margin-right:.75em;width:2.5em}.wp-block-latest-comments[class*=-font-size] a,.wp-block-latest-comments[style*=font-size] a{font-size:inherit}
+/*# sourceURL=https://resonancetv.com/wp-includes/blocks/latest-comments/style.min.css */
 </style>
 <style id="wp-block-latest-posts-inline-css">
 .wp-block-latest-posts{box-sizing:border-box}.wp-block-latest-posts.alignleft{margin-right:2em}.wp-block-latest-posts.alignright{margin-left:2em}.wp-block-latest-posts.wp-block-latest-posts__list{list-style:none}.wp-block-latest-posts.wp-block-latest-posts__list li{clear:both;overflow-wrap:break-word}.wp-block-latest-posts.is-grid:not(.is-layout-grid){display:flex;flex-wrap:wrap}.wp-block-latest-posts.is-grid:not(.is-layout-grid) li{margin:0 1.25em 1.25em 0;width:100%}@media (min-width:600px){.wp-block-latest-posts.columns-2:not(.is-layout-grid) li{width:calc(50% - .625em)}.wp-block-latest-posts.columns-2:not(.is-layout-grid) li:nth-child(2n){margin-right:0}.wp-block-latest-posts.columns-3:not(.is-layout-grid) li{width:calc(33.33333% - .83333em)}.wp-block-latest-posts.columns-3:not(.is-layout-grid) li:nth-child(3n){margin-right:0}.wp-block-latest-posts.columns-4:not(.is-layout-grid) li{width:calc(25% - .9375em)}.wp-block-latest-posts.columns-4:not(.is-layout-grid) li:nth-child(4n){margin-right:0}.wp-block-latest-posts.columns-5:not(.is-layout-grid) li{width:calc(20% - 1em)}.wp-block-latest-posts.columns-5:not(.is-layout-grid) li:nth-child(5n){margin-right:0}.wp-block-latest-posts.columns-6:not(.is-layout-grid) li{width:calc(16.66667% - 1.04167em)}.wp-block-latest-posts.columns-6:not(.is-layout-grid) li:nth-child(6n){margin-right:0}}@media (max-width:600px){.wp-block-latest-posts-is-layout-grid[class*=columns-]:not(.has-native-responsive-grid){grid-template-columns:1fr}}:root :where(.wp-block-latest-posts.is-grid){padding:0}:root :where(.wp-block-latest-posts.wp-block-latest-posts__list){padding-left:0}.wp-block-latest-posts__post-author,.wp-block-latest-posts__post-date{display:block;font-size:.8125em}.wp-block-latest-posts__post-excerpt,.wp-block-latest-posts__post-full-content{margin-bottom:1em;margin-top:.5em}.wp-block-latest-posts__featured-image a{display:inline-block}.wp-block-latest-posts__featured-image img{height:auto;max-width:100%;width:auto}.wp-block-latest-posts__featured-image.alignleft{float:left;margin-right:1em}.wp-block-latest-posts__featured-image.alignright{float:right;margin-left:1em}.wp-block-latest-posts__featured-image.aligncenter{margin-bottom:1em;text-align:center}
@@ -71,17 +1206,21 @@ ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:
 
 <link rel="stylesheet" id="generate-style-css" href="https://resonancetv.com/wp-content/themes/generatepress/assets/css/main.min.css?ver=3.6.1" media="all">
 <style id="generate-style-inline-css">
-body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent);}a{text-decoration:underline;}.entry-title a, .site-branding a, a.button, .wp-block-button__link, .main-navigation a{text-decoration:none;}a:hover, a:focus, a:active{color:var(--contrast);}.wp-block-group__inner-container{max-width:1200px;margin-left:auto;margin-right:auto;}.site-header .header-image{width:90px;}:root{--contrast:#222222;--contrast-2:#575760;--contrast-3:#b2b2be;--base:#f0f0f0;--base-2:#f7f8f9;--base-3:#ffffff;--accent:#1e73be;}:root .has-contrast-color{color:var(--contrast);}:root .has-contrast-background-color{background-color:var(--contrast);}:root .has-contrast-2-color{color:var(--contrast-2);}:root .has-contrast-2-background-color{background-color:var(--contrast-2);}:root .has-contrast-3-color{color:var(--contrast-3);}:root .has-contrast-3-background-color{background-color:var(--contrast-3);}:root .has-base-color{color:var(--base);}:root .has-base-background-color{background-color:var(--base);}:root .has-base-2-color{color:var(--base-2);}:root .has-base-2-background-color{background-color:var(--base-2);}:root .has-base-3-color{color:var(--base-3);}:root .has-base-3-background-color{background-color:var(--base-3);}:root .has-accent-color{color:var(--accent);}:root .has-accent-background-color{background-color:var(--accent);}.top-bar{background-color:#636363;color:#ffffff;}.top-bar a{color:#ffffff;}.top-bar a:hover{color:#303030;}.site-header{background-color:var(--base-3);}.main-title a,.main-title a:hover{color:var(--contrast);}.site-description{color:var(--contrast-2);}.mobile-menu-control-wrapper .menu-toggle,.mobile-menu-control-wrapper .menu-toggle:hover,.mobile-menu-control-wrapper .menu-toggle:focus,.has-inline-mobile-toggle #site-navigation.toggled{background-color:rgba(0, 0, 0, 0.02);}.main-navigation,.main-navigation ul ul{background-color:var(--base-3);}.main-navigation .main-nav ul li a, .main-navigation .menu-toggle, .main-navigation .menu-bar-items{color:var(--contrast);}.main-navigation .main-nav ul li:not([class*="current-menu-"]):hover > a, .main-navigation .main-nav ul li:not([class*="current-menu-"]):focus > a, .main-navigation .main-nav ul li.sfHover:not([class*="current-menu-"]) > a, .main-navigation .menu-bar-item:hover > a, .main-navigation .menu-bar-item.sfHover > a{color:var(--accent);}button.menu-toggle:hover,button.menu-toggle:focus{color:var(--contrast);}.main-navigation .main-nav ul li[class*="current-menu-"] > a{color:var(--accent);}.navigation-search input[type="search"],.navigation-search input[type="search"]:active, .navigation-search input[type="search"]:focus, .main-navigation .main-nav ul li.search-item.active > a, .main-navigation .menu-bar-items .search-item.active > a{color:var(--accent);}.main-navigation ul ul{background-color:var(--base);}.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header{background-color:var(--base-3);}.entry-title a{color:var(--contrast);}.entry-title a:hover{color:var(--contrast-2);}.entry-meta{color:var(--contrast-2);}.sidebar .widget{background-color:var(--base-3);}.footer-widgets{background-color:var(--base-3);}.site-info{background-color:var(--base-3);}input[type="text"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type="tel"],input[type="number"],textarea,select{color:var(--contrast);background-color:var(--base-2);border-color:var(--base);}input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="number"]:focus,textarea:focus,select:focus{color:var(--contrast);background-color:var(--base-2);border-color:var(--contrast-3);}button,html input[type="button"],input[type="reset"],input[type="submit"],a.button,a.wp-block-button__link:not(.has-background){color:#ffffff;background-color:#55555e;}button:hover,html input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover,a.button:hover,button:focus,html input[type="button"]:focus,input[type="reset"]:focus,input[type="submit"]:focus,a.button:focus,a.wp-block-button__link:not(.has-background):active,a.wp-block-button__link:not(.has-background):focus,a.wp-block-button__link:not(.has-background):hover{color:#ffffff;background-color:#3f4047;}a.generate-back-to-top{background-color:rgba( 0,0,0,0.4 );color:#ffffff;}a.generate-back-to-top:hover,a.generate-back-to-top:focus{background-color:rgba( 0,0,0,0.6 );color:#ffffff;}:root{--gp-search-modal-bg-color:var(--base-3);--gp-search-modal-text-color:var(--contrast);--gp-search-modal-overlay-bg-color:rgba(0,0,0,0.2);}@media (max-width:768px){.main-navigation .menu-bar-item:hover > a, .main-navigation .menu-bar-item.sfHover > a{background:none;color:var(--contrast);}}.nav-below-header .main-navigation .inside-navigation.grid-container, .nav-above-header .main-navigation .inside-navigation.grid-container{padding:0px 20px 0px 20px;}.site-main .wp-block-group__inner-container{padding:40px;}.separate-containers .paging-navigation{padding-top:20px;padding-bottom:20px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-40px;width:calc(100% + 80px);max-width:calc(100% + 80px);}.rtl .menu-item-has-children .dropdown-menu-toggle{padding-left:20px;}.rtl .main-navigation .main-nav ul li.menu-item-has-children > a{padding-right:20px;}@media (max-width:768px){.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .separate-containers .paging-navigation, .one-container .site-content, .inside-page-header{padding:30px;}.site-main .wp-block-group__inner-container{padding:30px;}.inside-top-bar{padding-right:30px;padding-left:30px;}.inside-header{padding-right:30px;padding-left:30px;}.widget-area .widget{padding-top:30px;padding-right:30px;padding-bottom:30px;padding-left:30px;}.footer-widgets-container{padding-top:30px;padding-right:30px;padding-bottom:30px;padding-left:30px;}.inside-site-info{padding-right:30px;padding-left:30px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-30px;width:calc(100% + 60px);max-width:calc(100% + 60px);}.one-container .site-main .paging-navigation{margin-bottom:20px;}}/* End cached CSS */.is-right-sidebar{width:30%;}.is-left-sidebar{width:30%;}.site-content .content-area{width:70%;}@media (max-width:768px){.main-navigation .menu-toggle,.sidebar-nav-mobile:not(#sticky-placeholder){display:block;}.main-navigation ul,.gen-sidebar-nav,.main-navigation:not(.slideout-navigation):not(.toggled) .main-nav > ul,.has-inline-mobile-toggle #site-navigation .inside-navigation > *:not(.navigation-search):not(.main-nav){display:none;}.nav-align-right .inside-navigation,.nav-align-center .inside-navigation{justify-content:space-between;}.has-inline-mobile-toggle .mobile-menu-control-wrapper{display:flex;flex-wrap:wrap;}.has-inline-mobile-toggle .inside-header{flex-direction:row;text-align:left;flex-wrap:wrap;}.has-inline-mobile-toggle .header-widget,.has-inline-mobile-toggle #site-navigation{flex-basis:100%;}.nav-float-left .has-inline-mobile-toggle #site-navigation{order:10;}}
+body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent);}a{text-decoration:underline;}.entry-title a, .site-branding a, a.button, .wp-block-button__link, .main-navigation a{text-decoration:none;}a:hover, a:focus, a:active{color:var(--contrast);}.wp-block-group__inner-container{max-width:1200px;margin-left:auto;margin-right:auto;}.site-header .header-image{width:100px;}:root{--contrast:#222222;--contrast-2:#575760;--contrast-3:#b2b2be;--base:#f0f0f0;--base-2:#f7f8f9;--base-3:#ffffff;--accent:#1e73be;}:root .has-contrast-color{color:var(--contrast);}:root .has-contrast-background-color{background-color:var(--contrast);}:root .has-contrast-2-color{color:var(--contrast-2);}:root .has-contrast-2-background-color{background-color:var(--contrast-2);}:root .has-contrast-3-color{color:var(--contrast-3);}:root .has-contrast-3-background-color{background-color:var(--contrast-3);}:root .has-base-color{color:var(--base);}:root .has-base-background-color{background-color:var(--base);}:root .has-base-2-color{color:var(--base-2);}:root .has-base-2-background-color{background-color:var(--base-2);}:root .has-base-3-color{color:var(--base-3);}:root .has-base-3-background-color{background-color:var(--base-3);}:root .has-accent-color{color:var(--accent);}:root .has-accent-background-color{background-color:var(--accent);}.top-bar{background-color:#636363;color:#ffffff;}.top-bar a{color:#ffffff;}.top-bar a:hover{color:#303030;}.site-header{background-color:var(--base-3);}.main-title a,.main-title a:hover{color:var(--contrast);}.site-description{color:var(--contrast-2);}.mobile-menu-control-wrapper .menu-toggle,.mobile-menu-control-wrapper .menu-toggle:hover,.mobile-menu-control-wrapper .menu-toggle:focus,.has-inline-mobile-toggle #site-navigation.toggled{background-color:rgba(0, 0, 0, 0.02);}.main-navigation,.main-navigation ul ul{background-color:var(--base-3);}.main-navigation .main-nav ul li a, .main-navigation .menu-toggle, .main-navigation .menu-bar-items{color:var(--contrast);}.main-navigation .main-nav ul li:not([class*="current-menu-"]):hover > a, .main-navigation .main-nav ul li:not([class*="current-menu-"]):focus > a, .main-navigation .main-nav ul li.sfHover:not([class*="current-menu-"]) > a, .main-navigation .menu-bar-item:hover > a, .main-navigation .menu-bar-item.sfHover > a{color:var(--accent);}button.menu-toggle:hover,button.menu-toggle:focus{color:var(--contrast);}.main-navigation .main-nav ul li[class*="current-menu-"] > a{color:var(--accent);}.navigation-search input[type="search"],.navigation-search input[type="search"]:active, .navigation-search input[type="search"]:focus, .main-navigation .main-nav ul li.search-item.active > a, .main-navigation .menu-bar-items .search-item.active > a{color:var(--accent);}.main-navigation ul ul{background-color:var(--base);}.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header{background-color:var(--base-3);}.entry-title a{color:var(--contrast);}.entry-title a:hover{color:var(--contrast-2);}.entry-meta{color:var(--contrast-2);}.sidebar .widget{background-color:var(--base-3);}.footer-widgets{background-color:var(--base-3);}.site-info{background-color:var(--base-3);}input[type="text"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type="tel"],input[type="number"],textarea,select{color:var(--contrast);background-color:var(--base-2);border-color:var(--base);}input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="number"]:focus,textarea:focus,select:focus{color:var(--contrast);background-color:var(--base-2);border-color:var(--contrast-3);}button,html input[type="button"],input[type="reset"],input[type="submit"],a.button,a.wp-block-button__link:not(.has-background){color:#ffffff;background-color:#55555e;}button:hover,html input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover,a.button:hover,button:focus,html input[type="button"]:focus,input[type="reset"]:focus,input[type="submit"]:focus,a.button:focus,a.wp-block-button__link:not(.has-background):active,a.wp-block-button__link:not(.has-background):focus,a.wp-block-button__link:not(.has-background):hover{color:#ffffff;background-color:#3f4047;}a.generate-back-to-top{background-color:rgba( 0,0,0,0.4 );color:#ffffff;}a.generate-back-to-top:hover,a.generate-back-to-top:focus{background-color:rgba( 0,0,0,0.6 );color:#ffffff;}:root{--gp-search-modal-bg-color:var(--base-3);--gp-search-modal-text-color:var(--contrast);--gp-search-modal-overlay-bg-color:rgba(0,0,0,0.2);}@media (max-width: 768px){.main-navigation .menu-bar-item:hover > a, .main-navigation .menu-bar-item.sfHover > a{background:none;color:var(--contrast);}}.nav-below-header .main-navigation .inside-navigation.grid-container, .nav-above-header .main-navigation .inside-navigation.grid-container{padding:0px 20px 0px 20px;}.site-main .wp-block-group__inner-container{padding:40px;}.separate-containers .paging-navigation{padding-top:20px;padding-bottom:20px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-40px;width:calc(100% + 80px);max-width:calc(100% + 80px);}.rtl .menu-item-has-children .dropdown-menu-toggle{padding-left:20px;}.rtl .main-navigation .main-nav ul li.menu-item-has-children > a{padding-right:20px;}@media (max-width:768px){.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .separate-containers .paging-navigation, .one-container .site-content, .inside-page-header{padding:30px;}.site-main .wp-block-group__inner-container{padding:30px;}.inside-top-bar{padding-right:30px;padding-left:30px;}.inside-header{padding-right:30px;padding-left:30px;}.widget-area .widget{padding-top:30px;padding-right:30px;padding-bottom:30px;padding-left:30px;}.footer-widgets-container{padding-top:30px;padding-right:30px;padding-bottom:30px;padding-left:30px;}.inside-site-info{padding-right:30px;padding-left:30px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-30px;width:calc(100% + 60px);max-width:calc(100% + 60px);}.one-container .site-main .paging-navigation{margin-bottom:20px;}}/* End cached CSS */.is-right-sidebar{width:30%;}.is-left-sidebar{width:30%;}.site-content .content-area{width:70%;}@media (max-width: 768px){.main-navigation .menu-toggle,.sidebar-nav-mobile:not(#sticky-placeholder){display:block;}.main-navigation ul,.gen-sidebar-nav,.main-navigation:not(.slideout-navigation):not(.toggled) .main-nav > ul,.has-inline-mobile-toggle #site-navigation .inside-navigation > *:not(.navigation-search):not(.main-nav){display:none;}.nav-align-right .inside-navigation,.nav-align-center .inside-navigation{justify-content:space-between;}.has-inline-mobile-toggle .mobile-menu-control-wrapper{display:flex;flex-wrap:wrap;}.has-inline-mobile-toggle .inside-header{flex-direction:row;text-align:left;flex-wrap:wrap;}.has-inline-mobile-toggle .header-widget,.has-inline-mobile-toggle #site-navigation{flex-basis:100%;}.nav-float-left .has-inline-mobile-toggle #site-navigation{order:10;}}
+.dynamic-author-image-rounded{border-radius:100%;}.dynamic-featured-image, .dynamic-author-image{vertical-align:middle;}.one-container.blog .dynamic-content-template:not(:last-child), .one-container.archive .dynamic-content-template:not(:last-child){padding-bottom:0px;}.dynamic-entry-excerpt > p:last-child{margin-bottom:0px;}
 /*# sourceURL=generate-style-inline-css */
 </style>
+<link rel="stylesheet" id="css-protect.css-css" href="https://resonancetv.com/wp-content/plugins/wccp-pro/css/css-protect.css?ver=3" media="all">
+<link rel="stylesheet" id="print-protection.css-css" href="https://resonancetv.com/wp-content/plugins/wccp-pro/css/print-protection.css?css_js_files_version_num=3&amp;ver=7.1.5" media="all">
+<script id="jquery-core-js" src="https://resonancetv.com/wp-includes/js/jquery/jquery.min.js?ver=3.7.1"></script>
+<script id="jquery-migrate-js" src="https://resonancetv.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"></script>
 <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://resonancetv.com/xmlrpc.php?rsd">
-<meta name="generator" content="WordPress 7.1.4">
-<link rel="canonical" href="https://resonancetv.com/disclaimer/">
-<link rel="shortlink" href="https://resonancetv.com/?p=49003">
-<link rel="icon" href="https://resonancetv.com/wp-content/uploads/2025/10/cropped-resonancetv-32x32.png" sizes="32x32">
-<link rel="icon" href="https://resonancetv.com/wp-content/uploads/2025/10/cropped-resonancetv-192x192.png" sizes="192x192">
-<link rel="apple-touch-icon" href="https://resonancetv.com/wp-content/uploads/2025/10/cropped-resonancetv-180x180.png">
-<meta name="msapplication-TileImage" content="https://resonancetv.com/wp-content/uploads/2025/10/cropped-resonancetv-270x270.png">
+<meta name="generator" content="WordPress 7.1.5">
+<link rel="shortlink" href="https://resonancetv.com/?p=88581">
+<link rel="icon" href="https://resonancetv.com/wp-content/uploads/2026/09/cropped-SOCCERSPEN-1-32x32.png" sizes="32x32">
+<link rel="icon" href="https://resonancetv.com/wp-content/uploads/2026/09/cropped-SOCCERSPEN-1-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="https://resonancetv.com/wp-content/uploads/2026/09/cropped-SOCCERSPEN-1-180x180.png">
+<meta name="msapplication-TileImage" content="https://resonancetv.com/wp-content/uploads/2026/09/cropped-SOCCERSPEN-1-270x270.png">
 <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
 <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
 <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
@@ -91,12 +1230,12 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 </script>
 <script src="//ezoicanalytics.com/analytics.js"></script></head>
 
-<body class="wp-singular page-template-default page page-id-49003 wp-custom-logo wp-embed-responsive wp-theme-generatepress right-sidebar nav-float-right separate-containers header-aligned-left dropdown-hover" itemtype="https://schema.org/WebPage" itemscope>
+<body class="wp-singular page-template-default page page-id-88581 wp-custom-logo wp-embed-responsive wp-theme-generatepress post-image-aligned-center sticky-menu-fade right-sidebar nav-float-right separate-containers header-aligned-left dropdown-hover" itemtype="https://schema.org/WebPage" itemscope>
 	<a class="screen-reader-text skip-link" href="#content" title="Skip to content">Skip to content</a>		<header class="site-header has-inline-mobile-toggle" id="masthead" aria-label="Site" itemtype="https://schema.org/WPHeader" itemscope>
 			<div class="inside-header grid-container">
 				<div class="site-logo">
 					<a href="https://resonancetv.com/" rel="home">
-						<img class="header-image is-logo-image" alt="Resonance Visa Sponsorship" src="https://resonancetv.com/wp-content/uploads/2025/09/cropped-RESONANCE-TV-LOGO.png" srcset="https://resonancetv.com/wp-content/uploads/2025/09/cropped-RESONANCE-TV-LOGO.png 1x, https://resonancetv.com/wp-content/uploads/2025/10/resonancetv.png 2x" width="1022" height="686">
+						<img class="header-image is-logo-image" alt="SOCCERSPEN" src="https://resonancetv.com/wp-content/uploads/2026/09/cropped-SOCCERSPEN.png" width="1254" height="514">
 					</a>
 				</div>	<nav class="main-navigation mobile-menu-control-wrapper" id="mobile-menu-control-wrapper" aria-label="Mobile Toggle">
 				<button data-nav="site-navigation" class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
@@ -105,13 +1244,20 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 			<nav class="main-navigation sub-menu-right" id="site-navigation" aria-label="Primary" itemtype="https://schema.org/SiteNavigationElement" itemscope>
 			<div class="inside-navigation grid-container">
 								<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
-					<span class="gp-icon icon-menu-bars"><svg viewbox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M0 96c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24z"></path></svg><svg viewbox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M71.029 71.029c9.373-9.372 24.569-9.372 33.942 0L256 222.059l151.029-151.03c9.373-9.372 24.569-9.372 33.942 0 9.372 9.373 9.372 24.569 0 33.942L289.941 256l151.03 151.029c9.372 9.373 9.372 24.569 0 33.942-9.373 9.372-24.569 9.372-33.942 0L256 289.941l-151.029 151.03c-9.373 9.372-24.569 9.372-33.942 0-9.372-9.373-9.372-24.569 0-33.942L222.059 256 71.029 104.971c-9.372-9.373-9.372-24.569 0-33.942z"></path></svg></span><span class="mobile-menu">Menu</span>				</button>
-				<div id="primary-menu" class="main-nav"><ul id="menu-menu" class=" menu sf-menu"><li id="menu-item-48988" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-48988"><a href="https://resonancetv.com/category/football-scholarship-guides/">Select Academy Scholarship Destination</a></li>
-<li id="menu-item-48989" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-48989"><a href="https://resonancetv.com/category/travel-guides/">Select Travel Location</a></li>
-<li id="menu-item-48990" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-48990"><a href="https://resonancetv.com/about/">About</a></li>
-<li id="menu-item-48991" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-48991"><a href="https://resonancetv.com/contact/">Contact</a></li>
-<li id="menu-item-48992" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-48992"><a href="https://resonancetv.com/privacy-policy-2/">Privacy Policy</a></li>
-<li id="menu-item-49006" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-49003 current_page_item menu-item-49006"><a href="https://resonancetv.com/disclaimer/" aria-current="page">Disclaimer</a></li>
+					<span class="gp-icon icon-menu-bars"><svg viewbox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M0 96c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24zm0 160c0-13.255 10.745-24 24-24h464c13.255 0 24 10.745 24 24s-10.745 24-24 24H24c-13.255 0-24-10.745-24-24z"></path></svg><svg viewbox="0 0 512 512" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M71.029 71.029c9.373-9.372 24.569-9.372 33.942 0L256 222.059l151.029-151.03c9.373-9.372 24.569-9.372 33.942 0 9.372 9.373 9.372 24.569 0 33.942L289.941 256l151.03 151.029c9.372 9.373 9.372 24.569 0 33.942-9.373 9.372-24.569 9.372-33.942 0L256 289.941l-151.029 151.03c-9.373 9.372-24.569 9.372-33.942 0-9.372-9.373-9.372-24.569 0-33.942L222.059 256 71.029 104.971c-9.372-9.373-9.372-24.569 0-33.942z"></path></svg></span><span class="screen-reader-text">Menu</span>				</button>
+				<div id="primary-menu" class="main-nav"><ul id="menu-soccerspen-menu" class=" menu sf-menu"><li id="menu-item-88653" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-88653"><a href="https://resonancetv.com/">Home</a></li>
+<li id="menu-item-88654" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-privacy-policy menu-item-88654"><a rel="privacy-policy" href="https://resonancetv.com/privacy-policy/">Privacy Policy</a></li>
+<li id="menu-item-88655" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88655"><a href="https://resonancetv.com/about-us/">About Soccerspen</a></li>
+<li id="menu-item-88656" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88656"><a href="https://resonancetv.com/contact-us/">Contact Us</a></li>
+<li id="menu-item-88657" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88657"><a href="https://resonancetv.com/cookie-policy/">Cookie Policy</a></li>
+<li id="menu-item-88658" class="menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-88581 current_page_item menu-item-88658"><a href="https://resonancetv.com/disclaimer/" aria-current="page">Disclaimer</a></li>
+<li id="menu-item-88659" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88659"><a href="https://resonancetv.com/editorial-policy/">Editorial Policy</a></li>
+<li id="menu-item-88660" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-88660"><a href="https://resonancetv.com/terms-and-conditions/">Terms and Conditions</a></li>
+<li id="menu-item-88565" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-88565"><a href="https://resonancetv.com/category/international-soccer-trials/">International Soccer Trials</a></li>
+<li id="menu-item-88566" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-88566"><a href="https://resonancetv.com/category/how-to-apply-for-football-soccer-academy-in-europe/">Football Scholarships</a></li>
+<li id="menu-item-88567" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-88567"><a href="https://resonancetv.com/category/nba-academy-in-usa/">NBA Academy in USA</a></li>
+<li id="menu-item-88568" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-88568"><a href="https://resonancetv.com/category/football-clubs-trials-for-youths/">Football Clubs Trials for Youths</a></li>
+<li id="menu-item-88569" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-88569"><a href="https://resonancetv.com/category/men-football-trials-for-u21/">Men Football Trials for U21</a></li>
 </ul></div>			</div>
 		</nav>
 					</div>
@@ -123,7 +1269,7 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 	<div class="content-area" id="primary">
 		<main class="site-main" id="main">
 			
-<article id="post-49003" class="post-49003 page type-page status-publish" itemtype="https://schema.org/CreativeWork" itemscope>
+<article id="post-88581" class="post-88581 page type-page status-publish" itemtype="https://schema.org/CreativeWork" itemscope>
 	<div class="inside-article">
 		
 			<header class="entry-header">
@@ -132,73 +1278,1379 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 			
 		<div class="entry-content" itemprop="text">
 			
-<p class="wp-block-paragraph">Welcome to <strong>ResonanceTV.com</strong>. The information provided on this website is for <strong>general informational and educational purposes only</strong>.</p>
+<p class="wp-block-paragraph">The information provided on <strong>Soccerspen</strong>, accessible through <strong><a href="https://resonancetv.com/">soccerspen.com</a></strong>, is published for general informational and educational purposes only.</p>
 
 
 
-<p class="wp-block-paragraph">We make every effort to ensure the accuracy and reliability of the information shared. However, we do not guarantee, warrant, or represent that the content on this website is completely accurate, up to date, or applicable to every individual situation.</p>
+<p class="wp-block-paragraph">By using this website, you acknowledge and agree to the terms of this Disclaimer.</p>
 
 
 
-<h2 class="wp-block-heading">No Professional Advice</h2>
+<p class="wp-block-paragraph">Soccerspen makes reasonable efforts to provide useful, relevant, and accurate information. However, we do not guarantee that all information published on the website will always be complete, current, accurate, or suitable for every individual circumstance.</p>
 
 
 
-<p class="wp-block-paragraph">The content on ResonanceTV.com is <strong>not professional legal, financial, immigration, or career advice</strong>.</p>
+<p class="wp-block-paragraph">Readers should independently verify important information before making decisions based on content published on Soccerspen.</p>
 
 
 
-<ul class="wp-block-list">
-<li>Visa requirements, immigration policies, job offers, and scholarship details may vary depending on your location and personal circumstances.</li>
+<h2 class="wp-block-heading">General Information Disclaimer</h2>
 
 
 
-<li>Always consult the <strong>official government websites, licensed professionals, or authorized institutions</strong> for verified information before making decisions.</li>
-</ul>
+<p class="wp-block-paragraph">Soccerspen is an independent football information website.</p>
 
 
 
-<h2 class="wp-block-heading">External Links</h2>
-
-
-
-<p class="wp-block-paragraph">This website may include links to third-party websites or resources. These are provided for convenience only.</p>
+<p class="wp-block-paragraph">We publish content relating to areas such as:</p>
 
 
 
 <ul class="wp-block-list">
-<li>ResonanceTV.com has no control over the content, accuracy, or policies of these external sites.</li>
+<li>Football</li>
 
 
 
-<li>We are not responsible for any loss, claim, or damages that may arise from accessing third-party information.</li>
+<li>Football academies</li>
+
+
+
+<li>Football trials</li>
+
+
+
+<li>Football scholarships</li>
+
+
+
+<li>University football</li>
+
+
+
+<li>Player development</li>
+
+
+
+<li>Football training</li>
+
+
+
+<li>Sports education</li>
+
+
+
+<li>Football careers</li>
+
+
+
+<li>International football opportunities</li>
+
+
+
+<li>Football clubs</li>
+
+
+
+<li>Sporting programmes</li>
+
+
+
+<li>Football-related education</li>
+
+
+
+<li>General football industry information</li>
 </ul>
 
 
 
-<h2 class="wp-block-heading">Earnings and Opportunities</h2>
+<p class="wp-block-paragraph">Our content is designed to help readers understand football-related topics and opportunities.</p>
 
 
 
-<p class="wp-block-paragraph">Articles that reference salaries, visa sponsorship offers, or career opportunities are <strong>illustrative and informational only</strong>.</p>
+<p class="wp-block-paragraph">However, articles published on Soccerspen should not be considered a substitute for official information provided by the organisation responsible for a particular opportunity.</p>
+
+
+
+<h2 class="wp-block-heading">No Guarantee of Accuracy</h2>
+
+
+
+<p class="wp-block-paragraph">We make reasonable efforts to research and publish accurate information.</p>
+
+
+
+<p class="wp-block-paragraph">However, information can change.</p>
+
+
+
+<p class="wp-block-paragraph">For example, universities may change their:</p>
 
 
 
 <ul class="wp-block-list">
-<li>ResonanceTV.com does not guarantee job placement, income levels, or sponsorship offers.</li>
+<li>Admission requirements</li>
 
 
 
-<li>Users are encouraged to verify all opportunities directly with employers or relevant authorities.</li>
+<li>Tuition fees</li>
+
+
+
+<li>Scholarship programmes</li>
+
+
+
+<li>Application deadlines</li>
+
+
+
+<li>Sporting requirements</li>
+
+
+
+<li>Eligibility conditions</li>
 </ul>
 
 
 
-<h2 class="wp-block-heading">Affiliate Disclosure</h2>
+<p class="wp-block-paragraph">Football clubs and academies may also change:</p>
 
 
 
-<p class="wp-block-paragraph">ResonanceTV.com may contain affiliate links or sponsored content. This means we may earn a commission if you click or make a purchase through these links. This comes at <strong>no additional cost</strong> to you and helps us maintain the website.</p>
+<ul class="wp-block-list">
+<li>Trial dates</li>
+
+
+
+<li>Recruitment procedures</li>
+
+
+
+<li>Age requirements</li>
+
+
+
+<li>Coaching programmes</li>
+
+
+
+<li>Fees</li>
+
+
+
+<li>Locations</li>
+
+
+
+<li>Application procedures</li>
+
+
+
+<li>Player eligibility requirements</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Government authorities may change immigration or visa requirements.</p>
+
+
+
+<p class="wp-block-paragraph">For these reasons, we cannot guarantee that every detail published on Soccerspen will remain accurate indefinitely.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should always confirm important information directly with the relevant organisation.</p>
+
+
+
+<h2 class="wp-block-heading">No Guarantee of Results</h2>
+
+
+
+<p class="wp-block-paragraph">Nothing published on Soccerspen guarantees that any reader will achieve a particular result.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not guarantee:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Football academy admission</li>
+
+
+
+<li>Football trial selection</li>
+
+
+
+<li>Professional football contracts</li>
+
+
+
+<li>Football scholarships</li>
+
+
+
+<li>University admission</li>
+
+
+
+<li>Sports scholarships</li>
+
+
+
+<li>Financial assistance</li>
+
+
+
+<li>Employment</li>
+
+
+
+<li>Player representation</li>
+
+
+
+<li>Sponsorship</li>
+
+
+
+<li>Visa approval</li>
+
+
+
+<li>Immigration approval</li>
+
+
+
+<li>Club recruitment</li>
+
+
+
+<li>Professional sporting success</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Individual outcomes depend on many factors that are outside our control.</p>
+
+
+
+<p class="wp-block-paragraph">These factors may include:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Sporting ability</li>
+
+
+
+<li>Academic qualifications</li>
+
+
+
+<li>Age</li>
+
+
+
+<li>Eligibility</li>
+
+
+
+<li>Work experience</li>
+
+
+
+<li>Financial circumstances</li>
+
+
+
+<li>Immigration status</li>
+
+
+
+<li>Location</li>
+
+
+
+<li>Competition</li>
+
+
+
+<li>Application quality</li>
+
+
+
+<li>Availability of places</li>
+
+
+
+<li>Decisions made by third-party organisations</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Readers should therefore never interpret content on Soccerspen as a promise or guarantee of success.</p>
+
+
+
+<h2 class="wp-block-heading">Football Scholarship Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may publish information about football scholarships, university sports scholarships, bursaries, athlete support programmes, and other educational funding opportunities.</p>
+
+
+
+<p class="wp-block-paragraph">Scholarship information may change at any time.</p>
+
+
+
+<p class="wp-block-paragraph">A scholarship mentioned on Soccerspen may:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Be discontinued</li>
+
+
+
+<li>Have limited availability</li>
+
+
+
+<li>Be restricted to particular applicants</li>
+
+
+
+<li>Require academic qualifications</li>
+
+
+
+<li>Require sporting achievements</li>
+
+
+
+<li>Require residency or nationality conditions</li>
+
+
+
+<li>Have specific deadlines</li>
+
+
+
+<li>Change in value</li>
+
+
+
+<li>Be subject to additional terms</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not control scholarship decisions.</p>
+
+
+
+<p class="wp-block-paragraph">The final decision regarding eligibility, selection, funding, or admission rests with the university, institution, organisation, or scholarship provider responsible for the opportunity.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should always confirm scholarship information directly with the official provider.</p>
+
+
+
+<h2 class="wp-block-heading">University and Education Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may publish information relating to universities, colleges, educational institutions, and sports programmes.</p>
+
+
+
+<p class="wp-block-paragraph">We are not a university admissions office unless explicitly stated otherwise.</p>
+
+
+
+<p class="wp-block-paragraph">We do not determine:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Admission decisions</li>
+
+
+
+<li>Course availability</li>
+
+
+
+<li>Tuition fees</li>
+
+
+
+<li>Entry requirements</li>
+
+
+
+<li>Scholarship awards</li>
+
+
+
+<li>Accommodation availability</li>
+
+
+
+<li>Academic eligibility</li>
+
+
+
+<li>Sporting eligibility</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Universities may change their policies and programmes without notice to Soccerspen.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should therefore verify educational information through official university or institution websites before applying.</p>
+
+
+
+<h2 class="wp-block-heading">Football Academy Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may discuss football academies, development programmes, training centres, and football clubs.</p>
+
+
+
+<p class="wp-block-paragraph">Unless clearly stated otherwise, Soccerspen does not own, manage, control, or represent third-party football academies.</p>
+
+
+
+<p class="wp-block-paragraph">The appearance of an academy on Soccerspen does not automatically mean that we endorse the organisation.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should conduct independent research before:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Registering with an academy</li>
+
+
+
+<li>Attending a programme</li>
+
+
+
+<li>Making payments</li>
+
+
+
+<li>Sending identification documents</li>
+
+
+
+<li>Arranging accommodation</li>
+
+
+
+<li>Travelling to attend a programme</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Parents and guardians should carry out additional checks when opportunities involve children or young players.</p>
+
+
+
+<h2 class="wp-block-heading">Football Trial Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Football trials are competitive.</p>
+
+
+
+<p class="wp-block-paragraph">Attending a football trial does not guarantee selection, a contract, or progression into professional football.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may provide information about football trials or explain how football trials generally work.</p>
+
+
+
+<p class="wp-block-paragraph">However, we cannot guarantee:</p>
+
+
+
+<ul class="wp-block-list">
+<li>That a trial remains available</li>
+
+
+
+<li>That an applicant will be invited</li>
+
+
+
+<li>That a player will be selected</li>
+
+
+
+<li>That a trial will result in a professional contract</li>
+
+
+
+<li>That a particular club will recruit a player</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Readers should confirm all trial information directly with the organisation responsible for the trial.</p>
+
+
+
+<h2 class="wp-block-heading">Recruitment and Scouting Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen is not a football agent, scouting agency, recruitment agency, or player management company unless explicitly stated otherwise.</p>
+
+
+
+<p class="wp-block-paragraph">We do not guarantee introductions to:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Professional clubs</li>
+
+
+
+<li>Scouts</li>
+
+
+
+<li>Football agents</li>
+
+
+
+<li>Coaches</li>
+
+
+
+<li>Universities</li>
+
+
+
+<li>Sporting organisations</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Any third party claiming to provide such services should be independently verified.</p>
+
+
+
+<p class="wp-block-paragraph">Be particularly cautious of individuals who promise guaranteed professional football contracts in exchange for payment.</p>
+
+
+
+<h2 class="wp-block-heading">Visa and Immigration Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Some content on Soccerspen may discuss international football opportunities, universities, scholarships, or programmes that involve travel to another country.</p>
+
+
+
+<p class="wp-block-paragraph">Such opportunities may involve immigration or visa requirements.</p>
+
+
+
+<p class="wp-block-paragraph">Any immigration-related information published on Soccerspen is provided for general informational purposes only.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen is not:</p>
+
+
+
+<ul class="wp-block-list">
+<li>An immigration authority</li>
+
+
+
+<li>A visa agency</li>
+
+
+
+<li>A law firm</li>
+
+
+
+<li>A government department</li>
+
+
+
+<li>A regulated immigration adviser</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Immigration rules can change frequently.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should verify current visa and immigration requirements through official government sources or qualified immigration professionals.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not guarantee visa approval.</p>
+
+
+
+<h2 class="wp-block-heading">Legal Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Nothing published on Soccerspen should be interpreted as legal advice.</p>
+
+
+
+<p class="wp-block-paragraph">Articles may discuss contracts, eligibility, visas, university requirements, football organisations, or other matters that have legal implications.</p>
+
+
+
+<p class="wp-block-paragraph">However, our content is not a substitute for advice from a qualified legal professional.</p>
+
+
+
+<p class="wp-block-paragraph">If you require legal advice, consult an appropriate professional.</p>
+
+
+
+<h2 class="wp-block-heading">Financial Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Information published on Soccerspen is not financial advice.</p>
+
+
+
+<p class="wp-block-paragraph">Some football opportunities may involve costs such as:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Tuition fees</li>
+
+
+
+<li>Academy fees</li>
+
+
+
+<li>Registration fees</li>
+
+
+
+<li>Travel expenses</li>
+
+
+
+<li>Visa fees</li>
+
+
+
+<li>Accommodation expenses</li>
+
+
+
+<li>Training fees</li>
+
+
+
+<li>Equipment costs</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Readers are responsible for assessing whether a particular expense is appropriate for their financial circumstances.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not guarantee that paying for a football programme, academy, course, or service will produce a particular result.</p>
+
+
+
+<h2 class="wp-block-heading">Career Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may publish content about football careers and employment opportunities.</p>
+
+
+
+<p class="wp-block-paragraph">This information is intended to help readers understand possible career paths within the football and sports industries.</p>
+
+
+
+<p class="wp-block-paragraph">We do not guarantee employment.</p>
+
+
+
+<p class="wp-block-paragraph">Factors affecting employment may include:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Qualifications</li>
+
+
+
+<li>Experience</li>
+
+
+
+<li>Location</li>
+
+
+
+<li>Competition</li>
+
+
+
+<li>Employer requirements</li>
+
+
+
+<li>Work authorisation</li>
+
+
+
+<li>Industry demand</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Readers should independently verify job requirements and employment conditions.</p>
+
+
+
+<h2 class="wp-block-heading">Health and Fitness Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Some Soccerspen content may discuss football training, fitness, conditioning, injury prevention, nutrition, or general physical preparation.</p>
+
+
+
+<p class="wp-block-paragraph">Such content is intended for general informational purposes only.</p>
+
+
+
+<p class="wp-block-paragraph">It is not a substitute for professional medical, physiotherapy, nutrition, or fitness advice.</p>
+
+
+
+<p class="wp-block-paragraph">Individuals have different health conditions and physical capabilities.</p>
+
+
+
+<p class="wp-block-paragraph">Before beginning a demanding training or fitness programme, readers should consider obtaining appropriate advice from a qualified professional, particularly where existing health concerns or injuries are present.</p>
+
+
+
+<h2 class="wp-block-heading">Third-Party Websites</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may contain links to external websites.</p>
+
+
+
+<p class="wp-block-paragraph">These links may direct users to:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Football clubs</li>
+
+
+
+<li>Universities</li>
+
+
+
+<li>Academies</li>
+
+
+
+<li>Government websites</li>
+
+
+
+<li>Scholarship providers</li>
+
+
+
+<li>Sporting organisations</li>
+
+
+
+<li>Training providers</li>
+
+
+
+<li>News websites</li>
+
+
+
+<li>Commercial businesses</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">We do not control independent third-party websites.</p>
+
+
+
+<p class="wp-block-paragraph">We are not responsible for their:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Content</li>
+
+
+
+<li>Accuracy</li>
+
+
+
+<li>Availability</li>
+
+
+
+<li>Privacy practices</li>
+
+
+
+<li>Security</li>
+
+
+
+<li>Products</li>
+
+
+
+<li>Services</li>
+
+
+
+<li>Business practices</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Users visit third-party websites at their own discretion.</p>
+
+
+
+<h2 class="wp-block-heading">External Link Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">The inclusion of an external link on Soccerspen does not automatically constitute an endorsement.</p>
+
+
+
+<p class="wp-block-paragraph">External links may be included because they provide:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Official information</li>
+
+
+
+<li>Additional context</li>
+
+
+
+<li>Application information</li>
+
+
+
+<li>Relevant resources</li>
+
+
+
+<li>Further reading</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Websites may change after we link to them.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen cannot continuously monitor every external website.</p>
+
+
+
+<p class="wp-block-paragraph">If you find a broken or inappropriate external link, please contact us.</p>
+
+
+
+<h2 class="wp-block-heading">Advertising Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may display advertisements from third-party advertising networks, including Google AdSense.</p>
+
+
+
+<p class="wp-block-paragraph">Advertisements are generally provided by third parties.</p>
+
+
+
+<p class="wp-block-paragraph">The presence of an advertisement on Soccerspen does not necessarily mean we recommend, approve, or endorse the advertiser, product, service, or claim.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should independently evaluate advertised products and services before making purchases or entering agreements.</p>
+
+
+
+<p class="wp-block-paragraph">Advertising providers may use cookies and related technologies according to applicable privacy rules and visitor consent preferences.</p>
+
+
+
+<p class="wp-block-paragraph">For more information, please review our Privacy Policy and Cookie Policy.</p>
+
+
+
+<h2 class="wp-block-heading">Google AdSense Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may participate in the Google AdSense advertising programme.</p>
+
+
+
+<p class="wp-block-paragraph">Google and its advertising partners may display advertisements on Soccerspen.</p>
+
+
+
+<p class="wp-block-paragraph">Advertisements may be selected based on factors such as:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Page content</li>
+
+
+
+<li>General location</li>
+
+
+
+<li>Advertising preferences</li>
+
+
+
+<li>Previous browsing activity where permitted</li>
+
+
+
+<li>Other advertising signals</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not manually select every advertisement displayed through Google AdSense.</p>
+
+
+
+<p class="wp-block-paragraph">The appearance of a particular advertisement does not necessarily represent an endorsement by Soccerspen.</p>
+
+
+
+<h2 class="wp-block-heading">Affiliate Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Some links on Soccerspen may be affiliate links.</p>
+
+
+
+<p class="wp-block-paragraph">This means that Soccerspen may receive a commission if a visitor follows a qualifying affiliate link and completes a purchase or another qualifying action.</p>
+
+
+
+<p class="wp-block-paragraph">Where appropriate, affiliate relationships will be disclosed.</p>
+
+
+
+<p class="wp-block-paragraph">Affiliate commissions generally do not change the price paid by the customer, although individual programmes may operate differently.</p>
+
+
+
+<p class="wp-block-paragraph">We aim to recommend or discuss products and services based on their relevance to our content.</p>
+
+
+
+<p class="wp-block-paragraph">However, readers should make purchasing decisions based on their own needs and research.</p>
+
+
+
+<h2 class="wp-block-heading">Sponsored Content Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may occasionally publish sponsored content or work with commercial partners.</p>
+
+
+
+<p class="wp-block-paragraph">Where required, sponsored content will be identified appropriately.</p>
+
+
+
+<p class="wp-block-paragraph">A commercial relationship does not mean that every statement made by a third-party company has been independently verified by Soccerspen.</p>
+
+
+
+<p class="wp-block-paragraph">Readers should perform appropriate research before acting on commercial claims.</p>
+
+
+
+<h2 class="wp-block-heading">Product and Service Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Any product, service, course, academy, software, educational programme, or other commercial offering mentioned on Soccerspen should be independently evaluated.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not guarantee:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Product quality</li>
+
+
+
+<li>Service quality</li>
+
+
+
+<li>Availability</li>
+
+
+
+<li>Pricing</li>
+
+
+
+<li>Delivery</li>
+
+
+
+<li>Refunds</li>
+
+
+
+<li>Customer support</li>
+
+
+
+<li>Suitability for every user</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Any dispute involving a third-party product or service should generally be addressed directly with that third party.</p>
+
+
+
+<h2 class="wp-block-heading">Fraud and Scam Warning</h2>
+
+
+
+<p class="wp-block-paragraph">Readers should exercise caution when dealing with online football opportunities.</p>
+
+
+
+<p class="wp-block-paragraph">Football-related scams can involve claims of:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Guaranteed professional contracts</li>
+
+
+
+<li>Guaranteed academy places</li>
+
+
+
+<li>Guaranteed trials</li>
+
+
+
+<li>Guaranteed scholarships</li>
+
+
+
+<li>Guaranteed visas</li>
+
+
+
+<li>Guaranteed university admission</li>
+
+
+
+<li>Guaranteed sponsorship</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Be cautious if someone asks you to make substantial payments before providing verifiable information about an opportunity.</p>
+
+
+
+<p class="wp-block-paragraph">You should also be careful when asked to provide:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Passport copies</li>
+
+
+
+<li>Banking details</li>
+
+
+
+<li>Passwords</li>
+
+
+
+<li>Government identification</li>
+
+
+
+<li>Credit card information</li>
+
+
+
+<li>Sensitive personal documents</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Verify the identity of organisations and individuals before sharing sensitive information.</p>
+
+
+
+<h2 class="wp-block-heading">Images and Media</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen may use images, videos, embeds, graphics, or other media in connection with our articles.</p>
+
+
+
+<p class="wp-block-paragraph">Where appropriate, we aim to use content that is:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Original</li>
+
+
+
+<li>Licensed</li>
+
+
+
+<li>Publicly available under appropriate terms</li>
+
+
+
+<li>Properly attributed</li>
+
+
+
+<li>Embedded from authorised platforms</li>
+
+
+
+<li>Otherwise permitted by applicable law</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">If you believe material appearing on Soccerspen infringes your intellectual property rights, please contact us.</p>
+
+
+
+<h2 class="wp-block-heading">Opinions</h2>
+
+
+
+<p class="wp-block-paragraph">Some articles may include analysis, commentary, opinions, comparisons, or recommendations.</p>
+
+
+
+<p class="wp-block-paragraph">These represent the views expressed in the relevant content and should not be treated as statements of guaranteed fact where the subject is inherently subjective.</p>
+
+
+
+<p class="wp-block-paragraph">Different readers may reasonably reach different conclusions.</p>
+
+
+
+<h2 class="wp-block-heading">Reader Responsibility</h2>
+
+
+
+<p class="wp-block-paragraph">You are responsible for decisions you make based on information obtained through Soccerspen.</p>
+
+
+
+<p class="wp-block-paragraph">Before making an important decision, you should:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Verify the information</li>
+
+
+
+<li>Check official sources</li>
+
+
+
+<li>Consider your individual circumstances</li>
+
+
+
+<li>Seek professional advice where appropriate</li>
+
+
+
+<li>Carefully review third-party terms</li>
+
+
+
+<li>Understand financial commitments</li>
+
+
+
+<li>Confirm eligibility requirements</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Soccerspen should be used as a research resource rather than the sole basis for major decisions.</p>
+
+
+
+<h2 class="wp-block-heading">Errors and Omissions</h2>
+
+
+
+<p class="wp-block-paragraph">Despite reasonable efforts to maintain accurate information, Soccerspen may contain:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Typographical errors</li>
+
+
+
+<li>Outdated information</li>
+
+
+
+<li>Broken links</li>
+
+
+
+<li>Incomplete information</li>
+
+
+
+<li>Technical errors</li>
+
+
+
+<li>Other mistakes</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">We reserve the right to correct, update, remove, or modify content at any time.</p>
+
+
+
+<p class="wp-block-paragraph">If you identify an error, please contact us through our Contact Us page.</p>
+
+
+
+<h2 class="wp-block-heading">Website Availability</h2>
+
+
+
+<p class="wp-block-paragraph">We do not guarantee that Soccerspen will always be available.</p>
+
+
+
+<p class="wp-block-paragraph">Access may occasionally be interrupted because of:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Maintenance</li>
+
+
+
+<li>Hosting problems</li>
+
+
+
+<li>Internet outages</li>
+
+
+
+<li>Technical failures</li>
+
+
+
+<li>Security issues</li>
+
+
+
+<li>Software changes</li>
+
+
+
+<li>Events outside our control</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">We may also modify or discontinue parts of the website.</p>
 
 
 
@@ -206,15 +2658,187 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 
 
 
-<p class="wp-block-paragraph">By using this website, you agree that ResonanceTV.com and its authors are <strong>not liable for any decisions, losses, or damages</strong> resulting from reliance on the information provided. Users are solely responsible for verifying information and acting accordingly.</p>
+<p class="wp-block-paragraph">To the fullest extent permitted by applicable law, Soccerspen and its operators are not responsible for losses or damages arising from reliance on information published on the website or from interactions with third parties mentioned on the website.</p>
 
 
 
-<h2 class="wp-block-heading">Consent</h2>
+<p class="wp-block-paragraph">This may include losses relating to:</p>
 
 
 
-<p class="wp-block-paragraph">By accessing and using ResonanceTV.com, you acknowledge and agree to this Disclaimer and our Terms of Use.</p>
+<ul class="wp-block-list">
+<li>Scholarship applications</li>
+
+
+
+<li>University applications</li>
+
+
+
+<li>Academy applications</li>
+
+
+
+<li>Football trials</li>
+
+
+
+<li>Travel bookings</li>
+
+
+
+<li>Purchases</li>
+
+
+
+<li>Visa applications</li>
+
+
+
+<li>Employment decisions</li>
+
+
+
+<li>Financial commitments</li>
+
+
+
+<li>Third-party services</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Nothing in this Disclaimer excludes liability where liability cannot legally be excluded.</p>
+
+
+
+<h2 class="wp-block-heading">No Professional Relationship</h2>
+
+
+
+<p class="wp-block-paragraph">Using Soccerspen does not create a professional relationship between you and Soccerspen.</p>
+
+
+
+<p class="wp-block-paragraph">In particular, use of the website does not create:</p>
+
+
+
+<ul class="wp-block-list">
+<li>A lawyer-client relationship</li>
+
+
+
+<li>An immigration adviser-client relationship</li>
+
+
+
+<li>A financial adviser-client relationship</li>
+
+
+
+<li>A football agent-player relationship</li>
+
+
+
+<li>A coach-player relationship</li>
+
+
+
+<li>A university applicant-adviser relationship</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">Any personalised professional advice should be obtained from an appropriately qualified individual or organisation.</p>
+
+
+
+<h2 class="wp-block-heading">Changes to This Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">We may update this Disclaimer when necessary.</p>
+
+
+
+<p class="wp-block-paragraph">Changes may be made because of:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Changes to our website</li>
+
+
+
+<li>Changes to our content</li>
+
+
+
+<li>Changes to advertising relationships</li>
+
+
+
+<li>Changes to third-party services</li>
+
+
+
+<li>Legal or regulatory developments</li>
+
+
+
+<li>Introduction of new website features</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">The date at the top of this page will be updated when appropriate.</p>
+
+
+
+<p class="wp-block-paragraph">Visitors should review this Disclaimer periodically.</p>
+
+
+
+<h2 class="wp-block-heading">Related Policies</h2>
+
+
+
+<p class="wp-block-paragraph">This Disclaimer should be read together with our:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Privacy Policy</li>
+
+
+
+<li>Cookie Policy</li>
+
+
+
+<li>Terms and Conditions</li>
+
+
+
+<li>Contact Us page</li>
+
+
+
+<li>Editorial Policy</li>
+
+
+
+<li>Advertising and Affiliate Disclosure</li>
+
+
+
+<li>Copyright Policy</li>
+</ul>
+
+
+
+<p class="wp-block-paragraph">These documents provide additional information about how Soccerspen operates.</p>
 
 
 
@@ -222,7 +2846,71 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 
 
 
-<p class="wp-block-paragraph">If you have any questions about this Disclaimer, please contact us at:<br>📧 admin@resonancetv.local</p>
+<p class="wp-block-paragraph">If you have questions about this Disclaimer or believe information published on Soccerspen should be corrected, please contact us.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Website:</strong> soccerspen.com</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Email:</strong> [Insert your official Soccerspen contact email]</p>
+
+
+
+<p class="wp-block-paragraph">We recommend using:</p>
+
+
+
+<p class="wp-block-paragraph"><strong>contact@soccerspen.local</strong></p>
+
+
+
+<p class="wp-block-paragraph">or</p>
+
+
+
+<p class="wp-block-paragraph"><strong>legal@soccerspen.local</strong></p>
+
+
+
+<p class="wp-block-paragraph">Please provide the relevant page URL and enough information for us to understand your enquiry.</p>
+
+
+
+<h2 class="wp-block-heading">Final Disclaimer</h2>
+
+
+
+<p class="wp-block-paragraph">Soccerspen exists to provide useful football-related information and educational resources.</p>
+
+
+
+<p class="wp-block-paragraph">We aim to help readers better understand football academies, scholarships, university programmes, player development, careers, training, and other opportunities.</p>
+
+
+
+<p class="wp-block-paragraph">However, readers remain responsible for verifying important information and making decisions appropriate to their individual circumstances.</p>
+
+
+
+<p class="wp-block-paragraph">Soccerspen does not promise or guarantee football contracts, scholarships, university admission, employment, visas, academy placements, financial returns, or any other particular outcome.</p>
+
+
+
+<p class="wp-block-paragraph">By using Soccerspen, you acknowledge and accept the limitations described in this Disclaimer.</p>
+
+
+
+<p class="wp-block-paragraph"><strong>Soccerspen</strong><br><strong>soccerspen.com</strong></p>
+
+
+
+<p class="wp-block-paragraph"><strong>Last Updated: 2 September 2026</strong></p>
+
+
+
+<p class="wp-block-paragraph"></p>
 		</div>
 
 			</div>
@@ -232,18 +2920,12 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 
 	<div class="widget-area sidebar is-right-sidebar" id="right-sidebar">
 	<div class="inside-right-sidebar">
-		<aside id="block-2" class="widget inner-padding widget_block widget_search"><form role="search" method="get" action="https://resonancetv.com/" class="wp-block-search__button-outside wp-block-search__text-button wp-block-search"><label class="wp-block-search__label" for="wp-block-search__input-1">Search</label><div class="wp-block-search__inside-wrapper"><input class="wp-block-search__input" id="wp-block-search__input-1" placeholder="" value="" type="search" name="s" required><button aria-label="Search" class="wp-block-search__button wp-element-button" type="submit">Search</button></div></form></aside><aside id="block-3" class="widget inner-padding widget_block">
-<div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow">
-<h2 class="wp-block-heading">Recent Posts</h2>
-
-
-<ul class="wp-block-latest-posts__list wp-block-latest-posts is-layout-flow wp-block-latest-posts-is-layout-flow"><li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/uk-employers-sponsoring-skilled-worker-visas-for-healthcare-engineering-and-it-professionals/">UK employers sponsoring Skilled Worker visas for healthcare, engineering, and IT professionals</a></li>
-<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/how-to-get-uk-residency-legal-routes-to-ilr-and-citizenship/">How to Get UK Residency: Legal Routes to ILR and Citizenship</a></li>
-<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/apply-for-harvard-academy-scholarship-admission-for-international-students-usa/">Apply for Harvard Academy Scholarship Admission for International Students, USA</a></li>
-<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/85000-us-dollars-visa-sponsorship-for-international-applicants-see-top-companies/">$85k US Visa Sponsorship for International Applicants | See Top Companies </a></li>
-<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/usa-visa-sponsorship-jobs-2025-2026-earn-50000-as-a-skilled-construction-worker/">$50k USA Visa Sponsorship Jobs for Skilled Construction Worker</a></li>
-</ul></div></div>
-</aside>	</div>
+		<aside id="block-2" class="widget inner-padding widget_block widget_search"><form role="search" method="get" action="https://resonancetv.com/" class="wp-block-search__button-outside wp-block-search__text-button wp-block-search"><label class="wp-block-search__label" for="wp-block-search__input-1">Search</label><div class="wp-block-search__inside-wrapper"><input class="wp-block-search__input" id="wp-block-search__input-1" placeholder="" value="" type="search" name="s" required><button aria-label="Search" class="wp-block-search__button wp-element-button" type="submit">Search</button></div></form></aside><aside id="block-3" class="widget inner-padding widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Recent Posts</h2><ul class="wp-block-latest-posts__list wp-block-latest-posts is-layout-flow wp-block-latest-posts-is-layout-flow"><li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/basketball-academies-in-new-jersey/">Basketball Academies in New Jersey</a></li>
+<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/basketball-academies-in-montana/">Basketball Academies in Montana</a></li>
+<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/basketball-academies-in-oregon/">Basketball Academies In Oregon</a></li>
+<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/basketball-academies-in-nevada/">How to Join Basketball Academies in Nevada</a></li>
+<li><a class="wp-block-latest-posts__post-title" href="https://resonancetv.com/basketball-academy-in-utah/">Basketball Academy in Utah</a></li>
+</ul></div></div></aside><aside id="block-4" class="widget inner-padding widget_block"><div class="wp-block-group"><div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"><h2 class="wp-block-heading">Recent Comments</h2><ol class="wp-block-latest-comments"><li class="wp-block-latest-comments__comment"><article><footer class="wp-block-latest-comments__comment-meta"><a class="wp-block-latest-comments__comment-author" href="https://resonancetv.com/how-to-join-enugu-rangers-youth-academy-trials-and-register/">Enugu Rangers Football Academy Trials - SOCCERSPEN</a> on <a class="wp-block-latest-comments__comment-link" href="https://resonancetv.com/how-to-join-the-volos-fc-youth-academy/#comment-46178">How To Join The Volos FC Youth Academy</a></footer></article></li><li class="wp-block-latest-comments__comment"><article><footer class="wp-block-latest-comments__comment-meta"><a class="wp-block-latest-comments__comment-author" href="https://resonancetv.com/the-trials-of-the-s-c-braga-youth-academy/">S.C. Braga Youth Football Academy Trials - SOCCERSPEN</a> on <a class="wp-block-latest-comments__comment-link" href="https://resonancetv.com/how-to-join-widzew-lodz-youth-academy/#comment-46153">How to Join Widzew Łódź Youth Football Academy Trials</a></footer></article></li><li class="wp-block-latest-comments__comment"><article><footer class="wp-block-latest-comments__comment-meta"><a class="wp-block-latest-comments__comment-author" href="https://resonancetv.com/the-trials-of-the-s-c-braga-youth-academy/">S.C. Braga Youth Football Academy Trials - SOCCERSPEN</a> on <a class="wp-block-latest-comments__comment-link" href="https://resonancetv.com/how-to-register-for-korona-fc-youth-academy-trials/#comment-46152">How to Join Korona FC Youth Football Academy</a></footer></article></li><li class="wp-block-latest-comments__comment"><article><footer class="wp-block-latest-comments__comment-meta"><a class="wp-block-latest-comments__comment-author" href="https://resonancetv.com/how-to-join-sandefjord-fc-youth-academy/">How to Join Sandefjord FC Youth Football Academy - SOCCERSPEN</a> on <a class="wp-block-latest-comments__comment-link" href="https://resonancetv.com/zenit-football-scholarship-admission-and-registration-requirements/#comment-46151">Zenit Youth Academy Scholarship and Registration Requirements</a></footer></article></li><li class="wp-block-latest-comments__comment"><article><footer class="wp-block-latest-comments__comment-meta"><a class="wp-block-latest-comments__comment-author" href="https://resonancetv.com/how-to-join-the-viking-youth-academy-trials-and-application-process/">How to Join Viking Youth Football Academy - SOCCERSPEN</a> on <a class="wp-block-latest-comments__comment-link" href="https://resonancetv.com/club-atletico-pr-fc-youth-academy-trial/#comment-46149">Club Atletico PR FC Youth Academy Trial</a></footer></article></li></ol></div></div></aside>	</div>
 </div>
 
 	</div>
@@ -254,7 +2936,7 @@ body{background-color:var(--base-2);color:var(--contrast);}a{color:var(--accent)
 			<footer class="site-info" aria-label="Site" itemtype="https://schema.org/WPFooter" itemscope>
 			<div class="inside-site-info grid-container">
 								<div class="copyright-bar">
-					<span class="copyright">© 2026 Resonance Visa Sponsorship</span> • Built with <a href="https://generatepress.com/" itemprop="url">GeneratePress</a>				</div>
+					© 2026 SOCCERSPEN				</div>
 			</div>
 		</footer>
 		</div>
@@ -270,8 +2952,13 @@ var generatepressMenu = {"toggleOpenedSubMenus":true,"openSubMenuLabel":"Open Su
 //# sourceURL=generate-menu-js-before
 </script>
 <script id="generate-menu-js" src="https://resonancetv.com/wp-content/themes/generatepress/assets/js/menu.min.js?ver=3.6.1"></script>
+<script id="wccp_pro_admin_bar_ajax-js-extra">
+var ajax_object = {"ajaxurl":"https://resonancetv.com/wp-admin/admin-ajax.php","link":"https://resonancetv.com/disclaimer/"};
+//# sourceURL=wccp_pro_admin_bar_ajax-js-extra
+</script>
+<script id="wccp_pro_admin_bar_ajax-js" src="https://resonancetv.com/wp-content/plugins/wccp-pro/js/admin_bar_ajax.js?ver=7.1.5"></script>
 <script id="wp-emoji-settings" type="application/json">
-{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://resonancetv.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.4"}}
+{"baseUrl":"https://s.w.org/images/core/emoji/17.0.2/72x72/","ext":".png","svgUrl":"https://s.w.org/images/core/emoji/17.0.2/svg/","svgExt":".svg","source":{"concatemoji":"https://resonancetv.com/wp-includes/js/wp-emoji-release.min.js?ver=7.1.5"}}
 </script>
 <script type="module">
 /*! This file is auto-generated */
